@@ -13,10 +13,16 @@
       margin-top: 20vh;
       font-family: sans-serif;
     }
+    #time {
+      font-size: 0.4em;
+      margin-top: 0.5em;
+      color: gray;
+    }
   </style>
 </head>
 <body>
   <div id="answer">Loading...</div>
+  <div id="time"></div>
 
   <script>
     function updateAnswer() {
@@ -26,6 +32,15 @@
 
       const is1055 = (hours === 10 || hours === 22) && minutes === 55;
       document.getElementById('answer').innerText = is1055 ? "Yes" : "No";
+
+      // Format current time as HH:MM:SS AM/PM
+      let displayHours = hours % 12 || 12;
+      let ampm = hours >= 12 ? 'PM' : 'AM';
+      let paddedMinutes = minutes.toString().padStart(2, '0');
+      let paddedSeconds = now.getSeconds().toString().padStart(2, '0');
+      let timeString = `${displayHours}:${paddedMinutes}:${paddedSeconds} ${ampm}`;
+
+      document.getElementById('time').innerText = timeString;
     }
 
     updateAnswer();
@@ -33,3 +48,4 @@
   </script>
 </body>
 </html>
+
