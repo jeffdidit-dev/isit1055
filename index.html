@@ -10,19 +10,29 @@
       color: white;
       font-size: 5em;
       text-align: center;
-      margin-top: 20vh;
+      margin-top: 10vh;
       font-family: sans-serif;
     }
     #time {
       font-size: 0.4em;
-      margin-top: 0.5em;
+      margin-top: 0.3em;
       color: gray;
+    }
+    #image {
+      margin-top: 40px;
+    }
+    img {
+      max-width: 80%;
+      height: auto;
     }
   </style>
 </head>
 <body>
   <div id="answer">Loading...</div>
   <div id="time"></div>
+  <div id="image">
+    <img id="display-image" src="" alt="Status Image">
+  </div>
 
   <script>
     function updateAnswer() {
@@ -31,16 +41,18 @@
       let minutes = now.getMinutes();
 
       const is1055 = (hours === 10 || hours === 22) && minutes === 55;
+
       document.getElementById('answer').innerText = is1055 ? "Yes" : "No";
 
-      // Format current time as HH:MM:SS AM/PM
       let displayHours = hours % 12 || 12;
       let ampm = hours >= 12 ? 'PM' : 'AM';
       let paddedMinutes = minutes.toString().padStart(2, '0');
       let paddedSeconds = now.getSeconds().toString().padStart(2, '0');
       let timeString = `${displayHours}:${paddedMinutes}:${paddedSeconds} ${ampm}`;
-
       document.getElementById('time').innerText = timeString;
+
+      // Set image
+      document.getElementById('display-image').src = is1055 ? "yes.png" : "no.png";
     }
 
     updateAnswer();
@@ -48,5 +60,6 @@
   </script>
 </body>
 </html>
+
 
 done
