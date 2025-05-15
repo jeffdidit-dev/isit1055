@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Is it 10:55?</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    body {
+      background: black;
+      color: white;
+      font-size: 5em;
+      text-align: center;
+      margin-top: 20vh;
+      font-family: sans-serif;
+    }
+  </style>
+</head>
+<body>
+  <div id="answer">Loading...</div>
+
+  <script>
+    function updateAnswer() {
+      const now = new Date();
+      let hours = now.getHours();
+      let minutes = now.getMinutes();
+
+      const is1055 = (hours === 10 || hours === 22) && minutes === 55;
+      document.getElementById('answer').innerText = is1055 ? "Yes" : "No";
+    }
+
+    updateAnswer();
+    setInterval(updateAnswer, 1000); // update every second
+  </script>
+</body>
+</html>
