@@ -44,7 +44,7 @@
 
       document.getElementById('answer').innerText = is1055 ? "Yes" : "No";
 
-      // Format current time
+      // Format time
       let displayHours = hours % 12 || 12;
       let ampm = hours >= 12 ? 'PM' : 'AM';
       let paddedMinutes = minutes.toString().padStart(2, '0');
@@ -52,8 +52,8 @@
       let timeString = `${displayHours}:${paddedMinutes}:${paddedSeconds} ${ampm}`;
       document.getElementById('time').innerText = timeString;
 
-      // Swap image
-      document.getElementById('display-image').src = is1055 ? "yes.png" : "no.png";
+      // Load correct image
+      document.getElementById('display-image').src = is1055 ? "yes.PNG" : "no.PNG";
     }
 
     updateAnswer();
@@ -61,3 +61,4 @@
   </script>
 </body>
 </html>
+
