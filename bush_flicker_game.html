@@ -1,0 +1,119 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Bush Flicker Game</title>
+  <style>
+    body {
+      margin: 0;
+      background: #7ec850;
+      font-family: Arial, sans-serif;
+      overflow: hidden;
+    }
+    #gameContainer {
+      position: relative;
+      width: 100vw;
+      height: 100vh;
+      background: url('bush_scene.png') center center no-repeat;
+      background-size: cover;
+      cursor: crosshair;
+    }
+    #head {
+      position: absolute;
+      width: 100px;
+      transition: top 0.2s, left 0.2s;
+      display: none;
+      z-index: 2;
+    }
+    #rock {
+      position: absolute;
+      width: 40px;
+      display: none;
+      z-index: 3;
+    }
+    #score {
+      position: absolute;
+      top: 10px;
+      left: 10px;
+      font-size: 24px;
+      color: white;
+      background: rgba(0,0,0,0.5);
+      padding: 10px;
+      border-radius: 8px;
+      z-index: 4;
+    }
+  </style>
+</head>
+<body>
+  <div id="gameContainer">
+    <img id="head" src="head_target.png" alt="head">
+    <img id="rock" src="head_target.png" alt="rock">
+    <div id="score">Score: 0</div>
+    <audio id="grunt" src="grunt.wav"></audio>
+    <audio id="hit" src="hit.wav"></audio>
+  </div>
+
+  <script>
+    const game = document.getElementById('gameContainer');
+    const head = document.getElementById('head');
+    const rock = document.getElementById('rock');
+    const scoreDisplay = document.getElementById('score');
+    const grunt = document.getElementById('grunt');
+    const hit = document.getElementById('hit');
+
+    let score = 0;
+    let streak = 0;
+    let speed = 2000;
+
+    function randomPosition() {
+      const x = Math.random() * (window.innerWidth - 100);
+      const y = Math.random() * (window.innerHeight - 100);
+      head.style.left = x + 'px';
+      head.style.top = y + 'px';
+    }
+
+    function showHead() {
+      randomPosition();
+      head.style.display = 'block';
+      setTimeout(() => {
+        head.style.display = 'none';
+        streak = 0;
+        score = 0;
+        updateScore();
+      }, speed);
+    }
+
+    function updateScore() {
+      scoreDisplay.textContent = 'Score: ' + score;
+    }
+
+    function flickRock(x, y) {
+      rock.style.left = x - 20 + 'px';
+      rock.style.top = y - 20 + 'px';
+      rock.style.display = 'block';
+      setTimeout(() => {
+        rock.style.display = 'none';
+      }, 300);
+    }
+
+    head.addEventListener('click', () => {
+      score++;
+      streak++;
+      if (streak % 3 === 0 && speed > 500) {
+        speed -= 200;
+      }
+      updateScore();
+      grunt.play();
+      head.style.display = 'none';
+    });
+
+    game.addEventListener('click', (e) => {
+      flickRock(e.clientX, e.clientY);
+      hit.play();
+    });
+
+    setInterval(showHead, speed);
+  </script>
+</body>
+</html>
