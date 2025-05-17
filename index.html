@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Is it 10:55?</title>
   <style>
     body {
@@ -55,29 +55,43 @@
   <div id="status">Loading...</div>
   <div id="clock">--:--:--</div>
   <img id="statusImage" src="" alt="Status Image" />
+  <audio id="statusSound" preload="auto"></audio>
 
   <script>
+    let lastStatus = "";
+
     function updateStatus() {
       const now = new Date();
       const hours = now.getHours();
       const minutes = now.getMinutes();
-      const seconds = now.getSeconds();
 
       const is1055 = (hours === 10 || hours === 22) && minutes === 55;
+
       const clock = document.getElementById("clock");
       const status = document.getElementById("status");
       const statusImage = document.getElementById("statusImage");
+      const statusSound = document.getElementById("statusSound");
 
       clock.textContent = now.toLocaleTimeString();
 
       if (is1055) {
         status.textContent = "Yes";
-        statusImage.src = "YES.PNG";
+        statusImage.src = "yes.PNG";
         statusImage.className = "bounce";
+        if (lastStatus !== "yes") {
+          statusSound.src = "yes.mp3";
+          statusSound.play();
+        }
+        lastStatus = "yes";
       } else {
         status.textContent = "No";
-        statusImage.src = "NO.PNG";
+        statusImage.src = "no.PNG";
         statusImage.className = "";
+        if (lastStatus !== "no") {
+          statusSound.src = "no.mp3";
+          statusSound.play();
+        }
+        lastStatus = "no";
       }
     }
 
