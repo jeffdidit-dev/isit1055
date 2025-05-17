@@ -113,7 +113,10 @@
   <div id="status">Loading...</div>
   <div id="clock">--:--:--</div>
   <img id="statusImage" src="" alt="Status Image" />
-  <audio id="statusSound" preload="auto"></audio>
+
+  <!-- Preloaded audio elements for instant playback -->
+  <audio id="yesSound" src="yes.mp3" preload="auto"></audio>
+  <audio id="noSound" src="no.mp3" preload="auto"></audio>
 
   <script>
     let lastStatus = "";
@@ -127,7 +130,7 @@
     function setAnimation(className) {
       const img = document.getElementById("statusImage");
       img.className = "";
-      void img.offsetWidth;
+      void img.offsetWidth; // force reflow
       img.className = className;
     }
 
@@ -165,27 +168,24 @@
     }
 
     function handleClick() {
-      const img = document.getElementById("statusImage");
-      const sound = document.getElementById("statusSound");
+      const yesSound = document.getElementById("yesSound");
+      const noSound = document.getElementById("noSound");
       clearAnimations();
 
       if (lastStatus === "yes") {
         setAnimation("bounce");
-        sound.src = "yes.mp3";
-        sound.currentTime = 0;
-        sound.play().catch(e => console.warn("Audio play failed:", e));
+        yesSound.currentTime = 0;
+        yesSound.play().catch(e => console.warn("Yes sound failed:", e));
       } else {
-        sound.src = "no.mp3";
-        sound.currentTime = 0;
-        sound.play().catch(e => console.warn("Audio play failed:", e));
+        noSound.currentTime = 0;
+        noSound.play().catch(e => console.warn("No sound failed:", e));
 
         setAnimation("smash"); // 0s
 
         timers.push(setTimeout(() => setAnimation("shake-slow"), 200));       // 0.2s
-
         timers.push(setTimeout(() => {
           setAnimation("shake-fast");
-          clearClassAfter("shake-fast", 1000); // 2.5s to 3.5s
+          clearClassAfter("shake-fast", 1000); // lasts to 3.5s
         }, 2500));
 
         timers.push(setTimeout(() => setAnimation("jump-small"), 3000));      // 3s
@@ -194,7 +194,7 @@
 
         timers.push(setTimeout(() => {
           setAnimation("shake-fast");
-          clearClassAfter("shake-fast", 1000); // 5.25s to 6.25s
+          clearClassAfter("shake-fast", 1000); // lasts to 6.25s
         }, 5250));
 
         timers.push(setTimeout(() => setAnimation("jump-small"), 6000));      // 6s
