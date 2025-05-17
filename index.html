@@ -127,7 +127,7 @@
     function setAnimation(className) {
       const img = document.getElementById("statusImage");
       img.className = "";
-      void img.offsetWidth; // Force reflow to restart animation
+      void img.offsetWidth;
       img.className = className;
     }
 
@@ -174,12 +174,13 @@
         timers.push(setTimeout(() => setAnimation("shake-fast"), 2500));      // 2.5s
         timers.push(setTimeout(() => setAnimation("jump-small"), 3000));      // 3s
         timers.push(setTimeout(() => setAnimation("jump-small"), 4000));      // 4s
-        timers.push(setTimeout(() => setAnimation("shake-soft"), 4100));      // 4.1s
+        timers.push(setTimeout(() => setAnimation("shake-soft"), 4300));      // 4.3s
         timers.push(setTimeout(() => setAnimation("shake-fast"), 5250));      // 5.25s
         timers.push(setTimeout(() => setAnimation("jump-small"), 6000));      // 6s
         timers.push(setTimeout(() => setAnimation("shake-small"), 6100));     // 6.1s
+        timers.push(setTimeout(() => setAnimation("shake-soft"), 7000));      // 7s (NEW soft shake before jump)
         timers.push(setTimeout(() => setAnimation("jump-small"), 7250));      // 7.25s
-        timers.push(setTimeout(() => setAnimation("jump-big"), 7750));        // 7.75s
+        timers.push(setTimeout(() => setAnimation("jump-big"), 7600));        // 7.6s
       }
     }
 
