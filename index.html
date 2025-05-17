@@ -126,8 +126,8 @@
 
     function setAnimation(className) {
       const img = document.getElementById("statusImage");
-      img.className = ""; // Reset
-      void img.offsetWidth; // Force reflow
+      img.className = "";
+      void img.offsetWidth; // Force reflow to restart animation
       img.className = className;
     }
 
@@ -168,32 +168,18 @@
         sound.src = "no.mp3";
         sound.play();
 
-        // Smash at 0s
-        setAnimation("smash");
+        setAnimation("smash"); // 0s
 
-        // Slow shake at 0.2s
-        timers.push(setTimeout(() => setAnimation("shake-slow"), 200));
-
-        // Fast shake at 2.5s
-        timers.push(setTimeout(() => setAnimation("shake-fast"), 2500));
-
-        // Small jump at 3s
-        timers.push(setTimeout(() => setAnimation("jump-small"), 3000));
-
-        // Soft shake at 4s
-        timers.push(setTimeout(() => setAnimation("shake-soft"), 4000));
-
-        // Fast shake again at 5.25s
-        timers.push(setTimeout(() => setAnimation("shake-fast"), 5250));
-
-        // Small jump at 6s
-        timers.push(setTimeout(() => setAnimation("jump-small"), 6000));
-
-        // Small shake at 6s–7.25s
-        timers.push(setTimeout(() => setAnimation("shake-small"), 6000));
-
-        // Big jump at 7.75s
-        timers.push(setTimeout(() => setAnimation("jump-big"), 7750));
+        timers.push(setTimeout(() => setAnimation("shake-slow"), 200));       // 0.2s
+        timers.push(setTimeout(() => setAnimation("shake-fast"), 2500));      // 2.5s
+        timers.push(setTimeout(() => setAnimation("jump-small"), 3000));      // 3s
+        timers.push(setTimeout(() => setAnimation("jump-small"), 4000));      // 4s
+        timers.push(setTimeout(() => setAnimation("shake-soft"), 4100));      // 4.1s
+        timers.push(setTimeout(() => setAnimation("shake-fast"), 5250));      // 5.25s
+        timers.push(setTimeout(() => setAnimation("jump-small"), 6000));      // 6s
+        timers.push(setTimeout(() => setAnimation("shake-small"), 6100));     // 6.1s
+        timers.push(setTimeout(() => setAnimation("jump-small"), 7250));      // 7.25s
+        timers.push(setTimeout(() => setAnimation("jump-big"), 7750));        // 7.75s
       }
     }
 
