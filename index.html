@@ -172,10 +172,12 @@
       if (lastStatus === "yes") {
         setAnimation("bounce");
         sound.src = "yes.mp3";
-        sound.play();
+        sound.currentTime = 0;
+        sound.play().catch(e => console.warn("Audio play failed:", e));
       } else {
         sound.src = "no.mp3";
-        sound.play();
+        sound.currentTime = 0;
+        sound.play().catch(e => console.warn("Audio play failed:", e));
 
         setAnimation("smash"); // 0s
 
@@ -183,7 +185,7 @@
 
         timers.push(setTimeout(() => {
           setAnimation("shake-fast");
-          clearClassAfter("shake-fast", 1000); // 2.5s + 1s = 3.5s
+          clearClassAfter("shake-fast", 1000); // 2.5s to 3.5s
         }, 2500));
 
         timers.push(setTimeout(() => setAnimation("jump-small"), 3000));      // 3s
@@ -192,7 +194,7 @@
 
         timers.push(setTimeout(() => {
           setAnimation("shake-fast");
-          clearClassAfter("shake-fast", 1000); // 5.25s + 1s = 6.25s
+          clearClassAfter("shake-fast", 1000); // 5.25s to 6.25s
         }, 5250));
 
         timers.push(setTimeout(() => setAnimation("jump-small"), 6000));      // 6s
