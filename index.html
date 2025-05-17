@@ -1,191 +1,112 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <title>Is it 10:55?</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta charset="UTF-8">
+  <title>isit1055</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
   <style>
     body {
-      margin: 0;
-      padding: 0;
+      background: #111;
+      color: white;
       font-family: sans-serif;
-      background-color: #000;
-      color: #fff;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: flex-start;
-      min-height: 100vh;
       text-align: center;
-      padding-top: 10vh;
+      padding-top: 100px;
     }
-
     #status {
-      font-size: 4rem;
-      margin-bottom: 0.25em;
+      font-size: 80px;
+      margin-bottom: 20px;
     }
-
     #clock {
-      font-size: 1.5rem;
-      margin-bottom: 1em;
+      font-size: 40px;
+      margin-bottom: 40px;
     }
-
-    img {
-      width: 60vw;
-      max-width: 300px;
-      height: auto;
-      cursor: pointer;
+    #garbage-can {
+      width: 120px;
+      height: 160px;
+      background: url('GarbageCan.PNG') no-repeat center/contain;
+      margin: 0 auto;
     }
-
-    @keyframes hit {
-      0%   { transform: scale(1) translateY(0); }
-      20%  { transform: scale(0.8, 1.2) translateY(0); }
-      40%  { transform: scale(1.2, 0.8) translateY(-10px); }
-      100% { transform: scale(1) translateY(0); }
-    }
-
-    @keyframes shake {
-      0%, 100% { transform: translate(0, 0); }
-      20% { transform: translate(-5px, 0); }
-      40% { transform: translate(5px, 0); }
-      60% { transform: translate(-5px, 0); }
-      80% { transform: translate(5px, 0); }
-    }
-
-    @keyframes shake-slow {
-      0%, 100% { transform: translate(0, 0); }
-      10% { transform: translate(-8px, 0); }
-      20% { transform: translate(8px, 0); }
-      30% { transform: translate(-8px, 0); }
-      40% { transform: translate(8px, 0); }
-      50% { transform: translate(-8px, 0); }
-      60% { transform: translate(8px, 0); }
-      70% { transform: translate(-8px, 0); }
-      80% { transform: translate(8px, 0); }
-      90% { transform: translate(-8px, 0); }
-    }
-
-    @keyframes bounce-small {
-      0%, 100% { transform: translateY(0); }
-      50% { transform: translateY(-15px); }
-    }
-
-    @keyframes bounce-big {
-      0%, 100% { transform: translateY(0); }
-      30% { transform: translateY(-100px); }
-    }
-
-    @keyframes spin {
-      from { transform: rotate(0deg); }
-      to { transform: rotate(360deg); }
-    }
-
-    .hit {
-      animation: hit 0.4s ease;
-    }
-
-    .shake {
-      animation: shake 1.2s ease;
-    }
-
-    .shake-slow {
-      animation: shake-slow 4s ease;
-    }
-
-    .bounce-small {
-      animation: bounce-small 0.3s ease;
-    }
-
-    .bounce-big {
-      animation: bounce-big 0.6s ease;
-    }
-
-    .spin {
-      animation: spin 2s linear;
-    }
-
-    audio {
+    #yes-image, #no-image {
+      width: 100px;
+      height: 100px;
+      margin-top: 30px;
       display: none;
     }
   </style>
 </head>
 <body>
-  <h1 id="status">No</h1>
-  <p id="clock">--:--:--</p>
 
-  <img id="garbage" src="no.PNG" alt="Garbage Can" onclick="playSound()" />
-
-  <audio id="yesSound" src="yes.mp3" preload="auto"></audio>
-  <audio id="noSound" src="no.mp3" preload="auto"></audio>
+  <div id="status">Loading...</div>
+  <div id="clock"></div>
+  <div id="garbage-can"></div>
+  <img id="yes-image" src="Yes.PNG" alt="Yes">
+  <img id="no-image" src="No.PNG" alt="No">
 
   <script>
-    function isTenFiftyFive() {
+    function updateTime() {
       const now = new Date();
-      const h = now.getHours();
-      const m = now.getMinutes();
-      return (h === 10 && m === 55) || (h === 22 && m === 55);
-    }
+      const hours = now.getHours();
+      const minutes = now.getMinutes();
+      const formattedTime = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' });
 
-    function updateClock() {
-      const now = new Date();
-      const clock = document.getElementById("clock");
+      document.getElementById("clock").textContent = formattedTime;
+
       const status = document.getElementById("status");
-      const garbage = document.getElementById("garbage");
+      const yesImage = document.getElementById("yes-image");
+      const noImage = document.getElementById("no-image");
+      const can = document.getElementById("garbage-can");
 
-      if (!clock || !status || !garbage) return;
-
-      const isYes = isTenFiftyFive();
-      clock.textContent = now.toLocaleTimeString();
-      status.textContent = isYes ? "Yes" : "No";
-      garbage.src = isYes ? "yes.PNG" : "no.PNG";
-    }
-
-    function playSound() {
-      const yesSound = document.getElementById("yesSound");
-      const noSound = document.getElementById("noSound");
-      const garbage = document.getElementById("garbage");
-
-      if (!garbage) return;
-
-      garbage.classList.remove("hit", "shake", "shake-slow", "bounce-small", "bounce-big", "spin");
-      void garbage.offsetWidth;
-
-      if (isTenFiftyFive()) {
-        yesSound.currentTime = 0;
-        yesSound.play();
-        garbage.classList.add("spin");
-        setTimeout(() => garbage.classList.remove("spin"), 2000);
+      if ((hours === 10 || hours === 22) && minutes === 55) {
+        status.textContent = "Yes";
+        yesImage.style.display = "block";
+        noImage.style.display = "none";
+        gsap.to("#yes-image", { rotation: "+=360", duration: 2 });
       } else {
-        noSound.currentTime = 0;
-        noSound.play();
+        status.textContent = "No";
+        yesImage.style.display = "none";
+        noImage.style.display = "block";
 
-        garbage.classList.add("hit");
-        setTimeout(() => garbage.classList.remove("hit"), 400);
+        // Clear previous animations
+        gsap.killTweensOf(can);
 
-        setTimeout(() => {
-          garbage.classList.add("shake");
-          setTimeout(() => garbage.classList.remove("shake"), 1200);
-        }, 400);
+        // Step 1: Hit animation
+        gsap.fromTo(can, 
+          { scaleX: 1.2, scaleY: 0.8 }, 
+          { scaleX: 1, scaleY: 1, duration: 0.2, ease: "power2.out" }
+        );
 
-        setTimeout(() => {
-          garbage.classList.add("shake-slow");
-          setTimeout(() => garbage.classList.remove("shake-slow"), 4000);
-        }, 3000);
+        // Step 2: Immediate jump
+        gsap.fromTo(can, 
+          { y: 0 }, 
+          { y: -20, duration: 0.2, ease: "power2.out", delay: 0.2 }
+        );
+        gsap.to(can, 
+          { y: 0, duration: 0.2, ease: "bounce.out", delay: 0.4 }
+        );
 
-        setTimeout(() => {
-          garbage.classList.add("bounce-small");
-          setTimeout(() => garbage.classList.remove("bounce-small"), 300);
-        }, 7000);
+        // Step 3: Shake at 3s
+        gsap.to(can, {
+          x: -5,
+          duration: 0.05,
+          repeat: 40,
+          yoyo: true,
+          delay: 3,
+          ease: "sine.inOut"
+        });
 
-        setTimeout(() => {
-          garbage.classList.add("bounce-big");
-          setTimeout(() => garbage.classList.remove("bounce-big"), 600);
-        }, 8000);
+        // Step 4: Small bounce at 4s
+        gsap.to(can, { y: -15, duration: 0.2, ease: "power2.out", delay: 4 });
+        gsap.to(can, { y: 0, duration: 0.3, ease: "bounce.out", delay: 4.2 });
+
+        // Step 5: Big bounce at 8s
+        gsap.to(can, { y: -40, duration: 0.3, ease: "power2.out", delay: 8 });
+        gsap.to(can, { y: 0, duration: 0.4, ease: "bounce.out", delay: 8.3 });
       }
     }
 
-    setInterval(updateClock, 1000);
-    updateClock();
+    setInterval(updateTime, 1000);
+    updateTime();
   </script>
+
 </body>
 </html>
