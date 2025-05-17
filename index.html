@@ -37,7 +37,15 @@
       cursor: pointer;
     }
 
-    /* Animations */
+    /* --- ANIMATIONS --- */
+
+    @keyframes hit {
+      0%   { transform: scale(1) translateY(0); }
+      20%  { transform: scale(0.8, 1.2) translateY(0); }
+      40%  { transform: scale(1.2, 0.8) translateY(-10px); }
+      100% { transform: scale(1) translateY(0); }
+    }
+
     @keyframes shake {
       0%, 100% { transform: translate(0, 0); }
       20% { transform: translate(-5px, 0); }
@@ -46,14 +54,27 @@
       80% { transform: translate(5px, 0); }
     }
 
+    @keyframes shake-slow {
+      0%, 100% { transform: translate(0, 0); }
+      10% { transform: translate(-8px, 0); }
+      20% { transform: translate(8px, 0); }
+      30% { transform: translate(-8px, 0); }
+      40% { transform: translate(8px, 0); }
+      50% { transform: translate(-8px, 0); }
+      60% { transform: translate(8px, 0); }
+      70% { transform: translate(-8px, 0); }
+      80% { transform: translate(8px, 0); }
+      90% { transform: translate(-8px, 0); }
+    }
+
     @keyframes bounce-small {
       0%, 100% { transform: translateY(0); }
-      50% { transform: translateY(-10px); }
+      50% { transform: translateY(-15px); }
     }
 
     @keyframes bounce-big {
       0%, 100% { transform: translateY(0); }
-      30% { transform: translateY(-80px); }
+      30% { transform: translateY(-100px); }
     }
 
     @keyframes spin {
@@ -61,8 +82,16 @@
       to { transform: rotate(360deg); }
     }
 
+    .hit {
+      animation: hit 0.4s ease;
+    }
+
     .shake {
-      animation: shake 2s ease;
+      animation: shake 1.2s ease;
+    }
+
+    .shake-slow {
+      animation: shake-slow 4s ease;
     }
 
     .bounce-small {
@@ -96,71 +125,4 @@
       const now = new Date();
       const h = now.getHours();
       const m = now.getMinutes();
-      return (h === 10 && m === 55) || (h === 22 && m === 55);
-    }
-
-    function updateClock() {
-      const now = new Date();
-      const clock = document.getElementById("clock");
-      const status = document.getElementById("status");
-      const garbage = document.getElementById("garbage");
-
-      const isYes = isTenFiftyFive();
-
-      clock.textContent = now.toLocaleTimeString();
-      status.textContent = isYes ? "Yes" : "No";
-      garbage.src = isYes ? "yes.PNG" : "no.PNG";
-    }
-
-    function playSound() {
-      const yesSound = document.getElementById("yesSound");
-      const noSound = document.getElementById("noSound");
-      const garbage = document.getElementById("garbage");
-
-      // Reset all animation classes
-      garbage.classList.remove("shake", "spin", "bounce-small", "bounce-big");
-      void garbage.offsetWidth; // Force reflow
-
-      if (isTenFiftyFive()) {
-        yesSound.currentTime = 0;
-        yesSound.play();
-
-        garbage.classList.add("spin");
-        setTimeout(() => garbage.classList.remove("spin"), 2000);
-      } else {
-        noSound.currentTime = 0;
-        noSound.play();
-
-        // 1. Shake
-        garbage.classList.add("shake");
-        setTimeout(() => garbage.classList.remove("shake"), 2000);
-
-        // 2. Small bounce x3
-        setTimeout(() => {
-          garbage.classList.add("bounce-small");
-          setTimeout(() => garbage.classList.remove("bounce-small"), 300);
-        }, 2100);
-
-        setTimeout(() => {
-          garbage.classList.add("bounce-small");
-          setTimeout(() => garbage.classList.remove("bounce-small"), 300);
-        }, 2500);
-
-        setTimeout(() => {
-          garbage.classList.add("bounce-small");
-          setTimeout(() => garbage.classList.remove("bounce-small"), 300);
-        }, 2900);
-
-        // 3. Big bounce
-        setTimeout(() => {
-          garbage.classList.add("bounce-big");
-          setTimeout(() => garbage.classList.remove("bounce-big"), 600);
-        }, 3500);
-      }
-    }
-
-    setInterval(updateClock, 1000);
-    updateClock();
-  </script>
-</body>
-</html>
+      return (
