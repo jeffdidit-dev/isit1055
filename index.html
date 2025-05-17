@@ -37,7 +37,7 @@
       cursor: pointer;
     }
 
-    /* Shake animation */
+    /* Animations */
     @keyframes shake {
       0%, 100% { transform: translate(0, 0); }
       20% { transform: translate(-5px, 0); }
@@ -46,14 +46,31 @@
       80% { transform: translate(5px, 0); }
     }
 
-    .shake {
-      animation: shake 0.5s ease;
+    @keyframes bounce-small {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-10px); }
     }
 
-    /* Spin animation */
+    @keyframes bounce-big {
+      0%, 100% { transform: translateY(0); }
+      30% { transform: translateY(-80px); }
+    }
+
     @keyframes spin {
       from { transform: rotate(0deg); }
       to { transform: rotate(360deg); }
+    }
+
+    .shake {
+      animation: shake 2s ease;
+    }
+
+    .bounce-small {
+      animation: bounce-small 0.3s ease;
+    }
+
+    .bounce-big {
+      animation: bounce-big 0.6s ease;
     }
 
     .spin {
@@ -100,8 +117,8 @@
       const noSound = document.getElementById("noSound");
       const garbage = document.getElementById("garbage");
 
-      // Remove any previous animation
-      garbage.classList.remove("shake", "spin");
+      // Reset all animation classes
+      garbage.classList.remove("shake", "spin", "bounce-small", "bounce-big");
       void garbage.offsetWidth; // Force reflow
 
       if (isTenFiftyFive()) {
@@ -114,8 +131,31 @@
         noSound.currentTime = 0;
         noSound.play();
 
+        // 1. Shake
         garbage.classList.add("shake");
         setTimeout(() => garbage.classList.remove("shake"), 2000);
+
+        // 2. Small bounce x3
+        setTimeout(() => {
+          garbage.classList.add("bounce-small");
+          setTimeout(() => garbage.classList.remove("bounce-small"), 300);
+        }, 2100);
+
+        setTimeout(() => {
+          garbage.classList.add("bounce-small");
+          setTimeout(() => garbage.classList.remove("bounce-small"), 300);
+        }, 2500);
+
+        setTimeout(() => {
+          garbage.classList.add("bounce-small");
+          setTimeout(() => garbage.classList.remove("bounce-small"), 300);
+        }, 2900);
+
+        // 3. Big bounce
+        setTimeout(() => {
+          garbage.classList.add("bounce-big");
+          setTimeout(() => garbage.classList.remove("bounce-big"), 600);
+        }, 3500);
       }
     }
 
@@ -124,4 +164,3 @@
   </script>
 </body>
 </html>
-
