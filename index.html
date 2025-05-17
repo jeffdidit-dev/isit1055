@@ -4,6 +4,14 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Is it 10:55?</title>
+
+  <!-- Site/App Icon for Home Screen -->
+  <link rel="icon" type="image/png" href="icon.png" />
+  <link rel="apple-touch-icon" href="icon.png" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-title" content="Is It 1055?" />
+  <meta name="theme-color" content="#000000" />
+
   <style>
     body {
       font-family: Arial, sans-serif;
@@ -30,37 +38,14 @@
       cursor: pointer;
     }
 
-    .smash {
-      animation: smash 0.2s ease;
-    }
-
-    .shake-slow {
-      animation: shake 1s infinite;
-    }
-
-    .shake-fast {
-      animation: shake 0.2s infinite;
-    }
-
-    .shake-soft {
-      animation: shakeSoft 1s infinite;
-    }
-
-    .shake-small {
-      animation: shakeSmall 0.4s infinite;
-    }
-
-    .jump-small {
-      animation: jumpSmall 0.6s ease;
-    }
-
-    .jump-big {
-      animation: jumpBig 0.8s ease;
-    }
-
-    .bounce {
-      animation: bounce 1s ease;
-    }
+    .smash { animation: smash 0.2s ease; }
+    .shake-slow { animation: shake 1s infinite; }
+    .shake-fast { animation: shake 0.2s infinite; }
+    .shake-soft { animation: shakeSoft 1s infinite; }
+    .shake-small { animation: shakeSmall 0.4s infinite; }
+    .jump-small { animation: jumpSmall 0.6s ease; }
+    .jump-big { animation: jumpBig 0.8s ease; }
+    .bounce { animation: bounce 1s ease; }
 
     @keyframes smash {
       0% { transform: scale(1); }
@@ -68,27 +53,24 @@
     }
 
     @keyframes shake {
-      0% { transform: translateX(2px); }
+      0%, 100% { transform: translateX(0); }
       25% { transform: translateX(-2px); }
       50% { transform: translateX(2px); }
       75% { transform: translateX(-2px); }
-      100% { transform: translateX(0); }
     }
 
     @keyframes shakeSoft {
-      0% { transform: translateX(1px); }
+      0%, 100% { transform: translateX(0); }
       25% { transform: translateX(-1px); }
       50% { transform: translateX(1px); }
       75% { transform: translateX(-1px); }
-      100% { transform: translateX(0); }
     }
 
     @keyframes shakeSmall {
-      0% { transform: translateX(0.5px); }
+      0%, 100% { transform: translateX(0); }
       25% { transform: translateX(-0.5px); }
       50% { transform: translateX(0.5px); }
       75% { transform: translateX(-0.5px); }
-      100% { transform: translateX(0); }
     }
 
     @keyframes jumpSmall {
@@ -114,7 +96,7 @@
   <div id="clock">--:--:--</div>
   <img id="statusImage" src="" alt="Status Image" />
 
-  <!-- Preloaded audio elements for instant playback -->
+  <!-- Preloaded Audio -->
   <audio id="yesSound" src="yes.mp3" preload="auto"></audio>
   <audio id="noSound" src="no.mp3" preload="auto"></audio>
 
@@ -180,33 +162,31 @@
         noSound.currentTime = 0;
         noSound.play().catch(e => console.warn("No sound failed:", e));
 
-        setAnimation("smash"); // 0s
+        setAnimation("smash");
 
-        timers.push(setTimeout(() => setAnimation("shake-slow"), 200));       // 0.2s
+        timers.push(setTimeout(() => setAnimation("shake-slow"), 200));
         timers.push(setTimeout(() => {
           setAnimation("shake-fast");
-          clearClassAfter("shake-fast", 1000); // lasts to 3.5s
+          clearClassAfter("shake-fast", 1000);
         }, 2500));
 
-        timers.push(setTimeout(() => setAnimation("jump-small"), 3000));      // 3s
-        timers.push(setTimeout(() => setAnimation("jump-small"), 4000));      // 4s
-        timers.push(setTimeout(() => setAnimation("shake-soft"), 4300));      // 4.3s
-
+        timers.push(setTimeout(() => setAnimation("jump-small"), 3000));
+        timers.push(setTimeout(() => setAnimation("jump-small"), 4000));
+        timers.push(setTimeout(() => setAnimation("shake-soft"), 4300));
         timers.push(setTimeout(() => {
           setAnimation("shake-fast");
-          clearClassAfter("shake-fast", 1000); // lasts to 6.25s
+          clearClassAfter("shake-fast", 1000);
         }, 5250));
 
-        timers.push(setTimeout(() => setAnimation("jump-small"), 6000));      // 6s
-        timers.push(setTimeout(() => setAnimation("shake-small"), 6100));     // 6.1s
-        timers.push(setTimeout(() => setAnimation("shake-soft"), 7000));      // 7s
-        timers.push(setTimeout(() => setAnimation("jump-big"), 8000));        // 8s
+        timers.push(setTimeout(() => setAnimation("jump-small"), 6000));
+        timers.push(setTimeout(() => setAnimation("shake-small"), 6100));
+        timers.push(setTimeout(() => setAnimation("shake-soft"), 7000));
+        timers.push(setTimeout(() => setAnimation("jump-big"), 8000));
       }
     }
 
     updateStatusDisplay();
     setInterval(updateStatusDisplay, 1000);
-
     document.getElementById("statusImage").addEventListener("click", handleClick);
   </script>
 </body>
