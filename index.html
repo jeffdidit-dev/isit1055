@@ -27,6 +27,7 @@
       width: 300px;
       height: auto;
       margin-top: 30px;
+      cursor: pointer;
     }
 
     .bounce {
@@ -108,7 +109,7 @@
       img.className = className;
     }
 
-    function updateStatus() {
+    function updateStatusDisplay() {
       const now = new Date();
       const hours = now.getHours();
       const minutes = now.getMinutes();
@@ -118,51 +119,47 @@
       const clock = document.getElementById("clock");
       const status = document.getElementById("status");
       const img = document.getElementById("statusImage");
-      const sound = document.getElementById("statusSound");
 
       clock.textContent = now.toLocaleTimeString();
-      clearAnimations();
 
       if (is1055) {
         status.textContent = "Yes";
         img.src = "yes.PNG";
-        setAnimation("bounce");
-
-        if (lastStatus !== "yes") {
-          sound.src = "yes.mp3";
-          sound.play();
-        }
         lastStatus = "yes";
       } else {
         status.textContent = "No";
         img.src = "no.PNG";
-
-        if (lastStatus !== "no") {
-          sound.src = "no.mp3";
-          sound.play();
-
-          // Smash
-          setAnimation("smash");
-
-          // Immediate jump
-          timers.push(setTimeout(() => setAnimation("jump-small"), 200));
-
-          // Shake after jump
-          timers.push(setTimeout(() => setAnimation("shake"), 800));
-
-          // Small jump at 4s
-          timers.push(setTimeout(() => setAnimation("jump-small"), 4000));
-
-          // Big jump at 8s
-          timers.push(setTimeout(() => setAnimation("jump-big"), 8000));
-        }
-
         lastStatus = "no";
       }
     }
 
-    updateStatus();
-    setInterval(updateStatus, 1000);
+    function handleClick() {
+      const img = document.getElementById("statusImage");
+      const sound = document.getElementById("statusSound");
+      clearAnimations();
+
+      if (lastStatus === "yes") {
+        setAnimation("bounce");
+        sound.src = "yes.mp3";
+        sound.play();
+      } else {
+        // No state: Smash → Jump → Shake → Small Jump (4s) → Big Jump (8s)
+        setAnimation("smash");
+        sound.src = "no.mp3";
+        sound.play();
+
+        timers.push(setTimeout(() => setAnimation("jump-small"), 200));
+        timers.push(setTimeout(() => setAnimation("shake"), 800));
+        timers.push(setTimeout(() => setAnimation("jump-small"), 4000));
+        timers.push(setTimeout(() => setAnimation("jump-big"), 8000));
+      }
+    }
+
+    // Init
+    updateStatusDisplay();
+    setInterval(updateStatusDisplay, 1000);
+
+    document.getElementById("statusImage").addEventListener("click", handleClick);
   </script>
 </body>
 </html>
