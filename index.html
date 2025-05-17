@@ -2,63 +2,60 @@
 <html>
 <head>
   <title>Is it 10:55?</title>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <style>
     body {
-      background: black;
-      color: white;
-      font-size: 5em;
+      font-family: Arial, sans-serif;
       text-align: center;
-      margin-top: 10vh;
-      font-family: sans-serif;
-    }
-    #time {
-      font-size: 0.4em;
-      margin-top: 0.3em;
-      color: gray;
-    }
-    #image {
-      margin-top: 40px;
+      margin-top: 100px;
     }
     img {
-      max-width: 80%;
-      height: auto;
+      cursor: pointer;
+      width: 150px;
     }
   </style>
 </head>
 <body>
-  <div id="answer">Loading...</div>
-  <div id="time"></div>
-  <div id="image">
-    <img id="display-image" src="" alt="Status Image">
-  </div>
+  <h1 id="status">No</h1>
+  <p id="clock"></p>
+
+  <img id="garbage" src="Garbage.png" alt="Garbage Can" onclick="playSound()" />
+
+  <audio id="yesSound" src="yes.mp3" preload="auto"></audio>
+  <audio id="noSound" src="no.mp3" preload="auto"></audio>
 
   <script>
-    function updateAnswer() {
+    function updateClock() {
       const now = new Date();
-      let hours = now.getHours();
-      let minutes = now.getMinutes();
+      const hours = now.getHours();
+      const minutes = now.getMinutes();
+      const status = document.getElementById("status");
+      const clock = document.getElementById("clock");
 
-      const is1055 = (hours === 10 || hours === 22) && minutes === 55;
+      clock.textContent = now.toLocaleTimeString();
 
-      document.getElementById('answer').innerText = is1055 ? "Yes" : "No";
-
-      // Format time
-      let displayHours = hours % 12 || 12;
-      let ampm = hours >= 12 ? 'PM' : 'AM';
-      let paddedMinutes = minutes.toString().padStart(2, '0');
-      let paddedSeconds = now.getSeconds().toString().padStart(2, '0');
-      let timeString = `${displayHours}:${paddedMinutes}:${paddedSeconds} ${ampm}`;
-      document.getElementById('time').innerText = timeString;
-
-      // Load correct image
-      document.getElementById('display-image').src = is1055 ? "yes.PNG" : "no.PNG";
+      if ((hours === 10 && minutes === 55) || (hours === 22 && minutes === 55)) {
+        status.textContent = "Yes";
+      } else {
+        status.textContent = "No";
+      }
     }
 
-    updateAnswer();
-    setInterval(updateAnswer, 1000); // update every second
+    function playSound() {
+      const now = new Date();
+      const hours = now.getHours();
+      const minutes = now.getMinutes();
+      const yesSound = document.getElementById("yesSound");
+      const noSound = document.getElementById("noSound");
+
+      if ((hours === 10 && minutes === 55) || (hours === 22 && minutes === 55)) {
+        yesSound.play();
+      } else {
+        noSound.play();
+      }
+    }
+
+    setInterval(updateClock, 1000);
+    updateClock();
   </script>
 </body>
 </html>
-
