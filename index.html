@@ -30,12 +30,20 @@
       cursor: pointer;
     }
 
-    .bounce {
-      animation: bounce 1s ease;
+    .smash {
+      animation: smash 0.2s ease;
     }
 
-    .shake {
-      animation: shake 0.5s infinite;
+    .shake-slow {
+      animation: shake 1s infinite;
+    }
+
+    .shake-fast {
+      animation: shake 0.2s infinite;
+    }
+
+    .shake-soft {
+      animation: shakeSoft 1s infinite;
     }
 
     .jump-small {
@@ -46,27 +54,29 @@
       animation: jumpBig 0.8s ease;
     }
 
-    .smash {
-      animation: smash 0.2s ease;
+    .bounce {
+      animation: bounce 1s ease;
     }
 
-    @keyframes bounce {
-      0%, 100% { transform: translateY(0); }
-      50% { transform: translateY(-50px); }
+    @keyframes smash {
+      0% { transform: scale(1); }
+      100% { transform: scale(0.8); }
     }
 
     @keyframes shake {
-      0% { transform: translate(1px, 1px) rotate(0deg); }
-      10% { transform: translate(-1px, -2px) rotate(-1deg); }
-      20% { transform: translate(-3px, 0px) rotate(1deg); }
-      30% { transform: translate(3px, 2px) rotate(0deg); }
-      40% { transform: translate(1px, -1px) rotate(1deg); }
-      50% { transform: translate(-1px, 2px) rotate(-1deg); }
-      60% { transform: translate(-3px, 1px) rotate(0deg); }
-      70% { transform: translate(3px, 1px) rotate(-1deg); }
-      80% { transform: translate(-1px, -1px) rotate(1deg); }
-      90% { transform: translate(1px, 2px) rotate(0deg); }
-      100% { transform: translate(1px, -2px) rotate(-1deg); }
+      0% { transform: translateX(2px); }
+      25% { transform: translateX(-2px); }
+      50% { transform: translateX(2px); }
+      75% { transform: translateX(-2px); }
+      100% { transform: translateX(0); }
+    }
+
+    @keyframes shakeSoft {
+      0% { transform: translateX(1px); }
+      25% { transform: translateX(-1px); }
+      50% { transform: translateX(1px); }
+      75% { transform: translateX(-1px); }
+      100% { transform: translateX(0); }
     }
 
     @keyframes jumpSmall {
@@ -81,9 +91,9 @@
       100% { transform: translateY(0); }
     }
 
-    @keyframes smash {
-      0% { transform: scale(1); }
-      100% { transform: scale(0.8); }
+    @keyframes bounce {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-50px); }
     }
   </style>
 </head>
@@ -104,8 +114,8 @@
 
     function setAnimation(className) {
       const img = document.getElementById("statusImage");
-      img.className = ""; // reset
-      void img.offsetWidth; // force reflow
+      img.className = ""; // Reset
+      void img.offsetWidth; // Force reflow
       img.className = className;
     }
 
@@ -143,19 +153,32 @@
         sound.src = "yes.mp3";
         sound.play();
       } else {
-        // No state: Smash → Jump → Shake → Small Jump (4s) → Big Jump (8s)
-        setAnimation("smash");
         sound.src = "no.mp3";
         sound.play();
 
-        timers.push(setTimeout(() => setAnimation("jump-small"), 200));
-        timers.push(setTimeout(() => setAnimation("shake"), 800));
-        timers.push(setTimeout(() => setAnimation("jump-small"), 4000));
+        // Smash
+        setAnimation("smash");
+
+        // Slow shake for 1s
+        timers.push(setTimeout(() => setAnimation("shake-slow"), 200));
+
+        // Fast shake for next 1s
+        timers.push(setTimeout(() => setAnimation("shake-fast"), 1200));
+
+        // Small jump at 3s
+        timers.push(setTimeout(() => setAnimation("jump-small"), 3000));
+
+        // Soft shake at ~4s
+        timers.push(setTimeout(() => setAnimation("shake-soft"), 4000));
+
+        // Small jump at 7s
+        timers.push(setTimeout(() => setAnimation("jump-small"), 7000));
+
+        // Big jump at 8s
         timers.push(setTimeout(() => setAnimation("jump-big"), 8000));
       }
     }
 
-    // Init
     updateStatusDisplay();
     setInterval(updateStatusDisplay, 1000);
 
