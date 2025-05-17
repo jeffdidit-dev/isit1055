@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="="en">
 <head>
   <meta charset="UTF-8">
   <title>isit1055</title>
@@ -23,7 +23,7 @@
     #garbage-can {
       width: 120px;
       height: 160px;
-      background: url('GarbageCan.PNG') no-repeat center/contain;
+      background: url('https://raw.githubusercontent.com/jeffdidit-dev/isit1055/main/garbagecan.png') no-repeat center/contain;
       margin: 0 auto;
     }
     #yes-image, #no-image {
@@ -39,15 +39,19 @@
   <div id="status">Loading...</div>
   <div id="clock"></div>
   <div id="garbage-can"></div>
-  <img id="yes-image" src="Yes.PNG" alt="Yes">
-  <img id="no-image" src="No.PNG" alt="No">
+  <img id="yes-image" src="https://raw.githubusercontent.com/jeffdidit-dev/isit1055/main/yes.png" alt="Yes">
+  <img id="no-image" src="https://raw.githubusercontent.com/jeffdidit-dev/isit1055/main/no.png" alt="No">
 
   <script>
     function updateTime() {
       const now = new Date();
       const hours = now.getHours();
       const minutes = now.getMinutes();
-      const formattedTime = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+      const formattedTime = now.toLocaleTimeString([], {
+        hour: '2-digit',
+        minute: '2-digit',
+        second: '2-digit'
+      });
 
       document.getElementById("clock").textContent = formattedTime;
 
