@@ -178,9 +178,8 @@
         timers.push(setTimeout(() => setAnimation("shake-fast"), 5250));      // 5.25s
         timers.push(setTimeout(() => setAnimation("jump-small"), 6000));      // 6s
         timers.push(setTimeout(() => setAnimation("shake-small"), 6100));     // 6.1s
-        timers.push(setTimeout(() => setAnimation("shake-soft"), 7000));      // 7s (NEW soft shake before jump)
-        timers.push(setTimeout(() => setAnimation("jump-small"), 7250));      // 7.25s
-        timers.push(setTimeout(() => setAnimation("jump-big"), 7600));        // 7.6s
+        timers.push(setTimeout(() => setAnimation("shake-soft"), 7000));      // 7s (start soft shake)
+        timers.push(setTimeout(() => setAnimation("jump-big"), 8000));        // 8s (end soft shake and jump)
       }
     }
 
