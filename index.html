@@ -1,116 +1,88 @@
 <!DOCTYPE html>
-<html lang="="en">
+<html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>isit1055</title>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Is it 10:55?</title>
   <style>
     body {
-      background: #111;
+      font-family: Arial, sans-serif;
+      background: black;
       color: white;
-      font-family: sans-serif;
       text-align: center;
-      padding-top: 100px;
+      padding-top: 50px;
     }
     #status {
       font-size: 80px;
-      margin-bottom: 20px;
+      margin: 20px;
     }
     #clock {
       font-size: 40px;
-      margin-bottom: 40px;
+      margin: 20px;
     }
-    #garbage-can {
-      width: 120px;
-      height: 160px;
-      background: url('https://raw.githubusercontent.com/jeffdidit-dev/isit1055/main/garbagecan.png') no-repeat center/contain;
-      margin: 0 auto;
-    }
-    #yes-image, #no-image {
-      width: 100px;
-      height: 100px;
+    #statusImage {
+      width: 300px;
+      height: auto;
       margin-top: 30px;
-      display: none;
+      transition: transform 0.3s ease-in-out;
+    }
+    .shake {
+      animation: shake 0.5s infinite;
+    }
+    .bounce {
+      animation: bounce 1s ease;
+    }
+    @keyframes shake {
+      0% { transform: translate(1px, 1px) rotate(0deg); }
+      10% { transform: translate(-1px, -2px) rotate(-1deg); }
+      20% { transform: translate(-3px, 0px) rotate(1deg); }
+      30% { transform: translate(3px, 2px) rotate(0deg); }
+      40% { transform: translate(1px, -1px) rotate(1deg); }
+      50% { transform: translate(-1px, 2px) rotate(-1deg); }
+      60% { transform: translate(-3px, 1px) rotate(0deg); }
+      70% { transform: translate(3px, 1px) rotate(-1deg); }
+      80% { transform: translate(-1px, -1px) rotate(1deg); }
+      90% { transform: translate(1px, 2px) rotate(0deg); }
+      100% { transform: translate(1px, -2px) rotate(-1deg); }
+    }
+    @keyframes bounce {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-50px); }
     }
   </style>
 </head>
 <body>
-
   <div id="status">Loading...</div>
-  <div id="clock"></div>
-  <div id="garbage-can"></div>
-  <img id="yes-image" src="https://raw.githubusercontent.com/jeffdidit-dev/isit1055/main/yes.png" alt="Yes">
-  <img id="no-image" src="https://raw.githubusercontent.com/jeffdidit-dev/isit1055/main/no.png" alt="No">
+  <div id="clock">--:--:--</div>
+  <img id="statusImage" src="" alt="Status Image" />
 
   <script>
-    function updateTime() {
+    function updateStatus() {
       const now = new Date();
       const hours = now.getHours();
       const minutes = now.getMinutes();
-      const formattedTime = now.toLocaleTimeString([], {
-        hour: '2-digit',
-        minute: '2-digit',
-        second: '2-digit'
-      });
+      const seconds = now.getSeconds();
 
-      document.getElementById("clock").textContent = formattedTime;
-
+      const is1055 = (hours === 10 || hours === 22) && minutes === 55;
+      const clock = document.getElementById("clock");
       const status = document.getElementById("status");
-      const yesImage = document.getElementById("yes-image");
-      const noImage = document.getElementById("no-image");
-      const can = document.getElementById("garbage-can");
+      const statusImage = document.getElementById("statusImage");
 
-      if ((hours === 10 || hours === 22) && minutes === 55) {
+      clock.textContent = now.toLocaleTimeString();
+
+      if (is1055) {
         status.textContent = "Yes";
-        yesImage.style.display = "block";
-        noImage.style.display = "none";
-        gsap.to("#yes-image", { rotation: "+=360", duration: 2 });
+        statusImage.src = "YES.PNG";
+        statusImage.className = "bounce";
       } else {
         status.textContent = "No";
-        yesImage.style.display = "none";
-        noImage.style.display = "block";
-
-        // Clear previous animations
-        gsap.killTweensOf(can);
-
-        // Step 1: Hit animation
-        gsap.fromTo(can, 
-          { scaleX: 1.2, scaleY: 0.8 }, 
-          { scaleX: 1, scaleY: 1, duration: 0.2, ease: "power2.out" }
-        );
-
-        // Step 2: Immediate jump
-        gsap.fromTo(can, 
-          { y: 0 }, 
-          { y: -20, duration: 0.2, ease: "power2.out", delay: 0.2 }
-        );
-        gsap.to(can, 
-          { y: 0, duration: 0.2, ease: "bounce.out", delay: 0.4 }
-        );
-
-        // Step 3: Shake at 3s
-        gsap.to(can, {
-          x: -5,
-          duration: 0.05,
-          repeat: 40,
-          yoyo: true,
-          delay: 3,
-          ease: "sine.inOut"
-        });
-
-        // Step 4: Small bounce at 4s
-        gsap.to(can, { y: -15, duration: 0.2, ease: "power2.out", delay: 4 });
-        gsap.to(can, { y: 0, duration: 0.3, ease: "bounce.out", delay: 4.2 });
-
-        // Step 5: Big bounce at 8s
-        gsap.to(can, { y: -40, duration: 0.3, ease: "power2.out", delay: 8 });
-        gsap.to(can, { y: 0, duration: 0.4, ease: "bounce.out", delay: 8.3 });
+        statusImage.src = "NO.PNG";
+        statusImage.className = "";
       }
     }
 
-    setInterval(updateTime, 1000);
-    updateTime();
+    updateStatus();
+    setInterval(updateStatus, 1000);
   </script>
-
 </body>
 </html>
