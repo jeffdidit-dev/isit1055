@@ -47,7 +47,7 @@
     }
 
     .shake {
-      animation: shake 0.5s infinite;
+      animation: shake 0.5s ease;
     }
 
     /* Spin animation */
@@ -57,7 +57,7 @@
     }
 
     .spin {
-      animation: spin 1.5s linear infinite;
+      animation: spin 2s linear;
     }
 
     audio {
@@ -93,23 +93,29 @@
       clock.textContent = now.toLocaleTimeString();
       status.textContent = isYes ? "Yes" : "No";
       garbage.src = isYes ? "yes.PNG" : "no.PNG";
-
-      // Reset animation classes to force reflow
-      garbage.classList.remove("shake", "spin");
-      void garbage.offsetWidth; // Force reflow (this is the key line)
-      garbage.classList.add(isYes ? "spin" : "shake");
     }
 
     function playSound() {
       const yesSound = document.getElementById("yesSound");
       const noSound = document.getElementById("noSound");
+      const garbage = document.getElementById("garbage");
+
+      // Remove any previous animation
+      garbage.classList.remove("shake", "spin");
+      void garbage.offsetWidth; // Force reflow
 
       if (isTenFiftyFive()) {
         yesSound.currentTime = 0;
         yesSound.play();
+
+        garbage.classList.add("spin");
+        setTimeout(() => garbage.classList.remove("spin"), 2000);
       } else {
         noSound.currentTime = 0;
         noSound.play();
+
+        garbage.classList.add("shake");
+        setTimeout(() => garbage.classList.remove("shake"), 2000);
       }
     }
 
@@ -118,3 +124,4 @@
   </script>
 </body>
 </html>
+
