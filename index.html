@@ -156,23 +156,23 @@
         sound.src = "no.mp3";
         sound.play();
 
-        // Smash
+        // Smash at 0s
         setAnimation("smash");
 
-        // Slow shake for 1s
+        // Slow shake starts at 0.2s
         timers.push(setTimeout(() => setAnimation("shake-slow"), 200));
 
-        // Fast shake for next 1s
-        timers.push(setTimeout(() => setAnimation("shake-fast"), 1200));
+        // Fast shake at 2.5s
+        timers.push(setTimeout(() => setAnimation("shake-fast"), 2500));
 
         // Small jump at 3s
         timers.push(setTimeout(() => setAnimation("jump-small"), 3000));
 
-        // Soft shake at ~4s
+        // Soft shake at 4s
         timers.push(setTimeout(() => setAnimation("shake-soft"), 4000));
 
-        // Small jump at 7s
-        timers.push(setTimeout(() => setAnimation("jump-small"), 7000));
+        // Small jump at 6s
+        timers.push(setTimeout(() => setAnimation("jump-small"), 6000));
 
         // Big jump at 8s
         timers.push(setTimeout(() => setAnimation("jump-big"), 8000));
