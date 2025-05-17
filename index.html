@@ -37,7 +37,6 @@
       cursor: pointer;
     }
 
-    /* Animations */
     @keyframes hit {
       0%   { transform: scale(1) translateY(0); }
       20%  { transform: scale(0.8, 1.2) translateY(0); }
@@ -82,4 +81,111 @@
     }
 
     .hit {
-      animation: hit 0.
+      animation: hit 0.4s ease;
+    }
+
+    .shake {
+      animation: shake 1.2s ease;
+    }
+
+    .shake-slow {
+      animation: shake-slow 4s ease;
+    }
+
+    .bounce-small {
+      animation: bounce-small 0.3s ease;
+    }
+
+    .bounce-big {
+      animation: bounce-big 0.6s ease;
+    }
+
+    .spin {
+      animation: spin 2s linear;
+    }
+
+    audio {
+      display: none;
+    }
+  </style>
+</head>
+<body>
+  <h1 id="status">No</h1>
+  <p id="clock">--:--:--</p>
+
+  <img id="garbage" src="no.PNG" alt="Garbage Can" onclick="playSound()" />
+
+  <audio id="yesSound" src="yes.mp3" preload="auto"></audio>
+  <audio id="noSound" src="no.mp3" preload="auto"></audio>
+
+  <script>
+    function isTenFiftyFive() {
+      const now = new Date();
+      const h = now.getHours();
+      const m = now.getMinutes();
+      return (h === 10 && m === 55) || (h === 22 && m === 55);
+    }
+
+    function updateClock() {
+      const now = new Date();
+      const clock = document.getElementById("clock");
+      const status = document.getElementById("status");
+      const garbage = document.getElementById("garbage");
+
+      if (!clock || !status || !garbage) return;
+
+      const isYes = isTenFiftyFive();
+      clock.textContent = now.toLocaleTimeString();
+      status.textContent = isYes ? "Yes" : "No";
+      garbage.src = isYes ? "yes.PNG" : "no.PNG";
+    }
+
+    function playSound() {
+      const yesSound = document.getElementById("yesSound");
+      const noSound = document.getElementById("noSound");
+      const garbage = document.getElementById("garbage");
+
+      if (!garbage) return;
+
+      garbage.classList.remove("hit", "shake", "shake-slow", "bounce-small", "bounce-big", "spin");
+      void garbage.offsetWidth;
+
+      if (isTenFiftyFive()) {
+        yesSound.currentTime = 0;
+        yesSound.play();
+        garbage.classList.add("spin");
+        setTimeout(() => garbage.classList.remove("spin"), 2000);
+      } else {
+        noSound.currentTime = 0;
+        noSound.play();
+
+        garbage.classList.add("hit");
+        setTimeout(() => garbage.classList.remove("hit"), 400);
+
+        setTimeout(() => {
+          garbage.classList.add("shake");
+          setTimeout(() => garbage.classList.remove("shake"), 1200);
+        }, 400);
+
+        setTimeout(() => {
+          garbage.classList.add("shake-slow");
+          setTimeout(() => garbage.classList.remove("shake-slow"), 4000);
+        }, 3000);
+
+        setTimeout(() => {
+          garbage.classList.add("bounce-small");
+          setTimeout(() => garbage.classList.remove("bounce-small"), 300);
+        }, 7000);
+
+        setTimeout(() => {
+          garbage.classList.add("bounce-big");
+          setTimeout(() => garbage.classList.remove("bounce-big"), 600);
+        }, 8000);
+      }
+    }
+
+    setInterval(updateClock, 1000);
+    updateClock();
+  </script>
+</body>
+</html>
