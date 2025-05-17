@@ -10,7 +10,7 @@
     }
     img {
       cursor: pointer;
-      width: 150px;
+      width: 200px;
     }
   </style>
 </head>
@@ -18,39 +18,41 @@
   <h1 id="status">No</h1>
   <p id="clock"></p>
 
-  <img id="garbage" src="Garbage.png" alt="Garbage Can" onclick="playSound()" />
+  <img id="garbage" src="no.PNG" alt="Garbage Can" onclick="playSound()" />
 
   <audio id="yesSound" src="yes.mp3" preload="auto"></audio>
   <audio id="noSound" src="no.mp3" preload="auto"></audio>
 
   <script>
-    function updateClock() {
+    function isTenFiftyFive() {
       const now = new Date();
       const hours = now.getHours();
       const minutes = now.getMinutes();
+      return (hours === 10 && minutes === 55) || (hours === 22 && minutes === 55);
+    }
+
+    function updateClock() {
+      const now = new Date();
       const status = document.getElementById("status");
       const clock = document.getElementById("clock");
+      const garbage = document.getElementById("garbage");
 
       clock.textContent = now.toLocaleTimeString();
 
-      if ((hours === 10 && minutes === 55) || (hours === 22 && minutes === 55)) {
+      if (isTenFiftyFive()) {
         status.textContent = "Yes";
+        garbage.src = "yes.PNG";
       } else {
         status.textContent = "No";
+        garbage.src = "no.PNG";
       }
     }
 
     function playSound() {
-      const now = new Date();
-      const hours = now.getHours();
-      const minutes = now.getMinutes();
-      const yesSound = document.getElementById("yesSound");
-      const noSound = document.getElementById("noSound");
-
-      if ((hours === 10 && minutes === 55) || (hours === 22 && minutes === 55)) {
-        yesSound.play();
+      if (isTenFiftyFive()) {
+        document.getElementById("yesSound").play();
       } else {
-        noSound.play();
+        document.getElementById("noSound").play();
       }
     }
 
@@ -59,3 +61,4 @@
   </script>
 </body>
 </html>
+
