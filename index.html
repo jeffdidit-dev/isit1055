@@ -5,7 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Is it 10:55?</title>
 
-  <!-- Site/App Icon for Home Screen -->
   <link rel="icon" type="image/png" href="icon.png" />
   <link rel="apple-touch-icon" href="icon.png" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -112,7 +111,7 @@
     function setAnimation(className) {
       const img = document.getElementById("statusImage");
       img.className = "";
-      void img.offsetWidth; // force reflow
+      void img.offsetWidth;
       img.className = className;
     }
 
@@ -165,18 +164,22 @@
         setAnimation("smash");
 
         timers.push(setTimeout(() => setAnimation("shake-slow"), 200));
+
+        // Shake-Fast #1 (3s to 4s)
         timers.push(setTimeout(() => {
           setAnimation("shake-fast");
           clearClassAfter("shake-fast", 1000);
-        }, 2500));
+        }, 3000));
 
         timers.push(setTimeout(() => setAnimation("jump-small"), 3000));
         timers.push(setTimeout(() => setAnimation("jump-small"), 4000));
         timers.push(setTimeout(() => setAnimation("shake-soft"), 4300));
+
+        // Shake-Fast #2 (6s to 7.5s)
         timers.push(setTimeout(() => {
           setAnimation("shake-fast");
-          clearClassAfter("shake-fast", 1000);
-        }, 5250));
+          clearClassAfter("shake-fast", 1500);
+        }, 6000));
 
         timers.push(setTimeout(() => setAnimation("jump-small"), 6000));
         timers.push(setTimeout(() => setAnimation("shake-small"), 6100));
