@@ -2,6 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>IS IT 10:55</title>
   <style>
     body {
@@ -80,7 +81,7 @@
   <h1>IS IT 10:55</h1>
   <div id="time">Loading...</div>
   <div id="answer">Checking...</div>
-  <img id="can" src="garbage.png" alt="Trash Can" />
+  <img id="can" src="no.png" alt="Trash Can" />
 
   <script>
     const timeEl = document.getElementById('time');
@@ -91,10 +92,14 @@
       const now = new Date();
       const hours = now.getHours();
       const minutes = now.getMinutes();
+      const is1055 = (hours === 10 && minutes === 55);
+
       const timeStr = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
       timeEl.textContent = timeStr;
-      const is1055 = (hours === 10 && minutes === 55);
       answerEl.textContent = is1055 ? 'YES' : 'NO';
+
+      // Update image
+      can.src = is1055 ? 'yes.png' : 'no.png';
     }
 
     function animateTrash() {
@@ -102,22 +107,22 @@
 
       setTimeout(() => {
         can.classList.add('shake-fast-2');
-      }, 3000);
+      }, 3000); // 3s
 
       setTimeout(() => {
         can.classList.remove('shake-fast-2');
         can.classList.add('jump-small');
-      }, 5000);
+      }, 5000); // 5s
 
       setTimeout(() => {
         can.classList.remove('jump-small');
         can.classList.add('shake-fast');
-      }, 6000);
+      }, 6000); // 6s
 
       setTimeout(() => {
         can.classList.remove('shake-fast');
         can.classList.add('jump-large');
-      }, 8100);
+      }, 8100); // 8.1s
     }
 
     document.addEventListener('click', () => {
