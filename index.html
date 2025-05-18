@@ -175,15 +175,17 @@
         timers.push(setTimeout(() => setAnimation("jump-small"), 4000));
         timers.push(setTimeout(() => setAnimation("shake-soft"), 4300));
 
-        // shake-fast #2: 6.0s → 8.0s
+        // shake-fast #2: 5.75s → 7.75s
         timers.push(setTimeout(() => {
           setAnimation("shake-fast");
           clearClassAfter("shake-fast", 2000);
-        }, 6000));
+        }, 5750));
 
         timers.push(setTimeout(() => setAnimation("jump-small"), 6000));
         timers.push(setTimeout(() => setAnimation("shake-small"), 6100));
         timers.push(setTimeout(() => setAnimation("shake-soft"), 7000));
+
+        // jump-big at 8.0s
         timers.push(setTimeout(() => setAnimation("jump-big"), 8000));
       }
     }
@@ -194,4 +196,3 @@
   </script>
 </body>
 </html>
-
