@@ -12,127 +12,51 @@
       display: flex;
       flex-direction: column;
       align-items: center;
-      justify-content: center;
+      justify-content: start;
       height: 100vh;
       margin: 0;
+      padding-top: 5vh;
     }
 
-    h1 {
-      font-size: 4rem;
+    #answer {
+      font-size: 6rem;
       margin: 0;
     }
 
     #time {
-      font-size: 1.5rem;
-      margin: 0.5rem 0;
-    }
-
-    #answer {
-      font-size: 3rem;
+      font-size: 2rem;
       margin: 1rem 0;
     }
 
     #can {
-      width: 80px;
-      margin-top: 20px;
-      transition: transform 0.3s;
-    }
-
-    .shake-fast-2 {
-      animation: shake 0.1s infinite;
-    }
-
-    .shake-fast {
-      animation: shake 0.1s infinite;
-    }
-
-    .jump-small {
-      animation: jump-small 0.4s ease;
-    }
-
-    .jump-large {
-      animation: jump-large 0.8s ease;
-    }
-
-    @keyframes shake {
-      0% { transform: translate(1px, 0); }
-      25% { transform: translate(-1px, 0); }
-      50% { transform: translate(1px, 0); }
-      75% { transform: translate(-1px, 0); }
-      100% { transform: translate(1px, 0); }
-    }
-
-    @keyframes jump-small {
-      0%   { transform: translateY(0); }
-      30%  { transform: translateY(-15px); }
-      60%  { transform: translateY(-5px); }
-      100% { transform: translateY(0); }
-    }
-
-    @keyframes jump-large {
-      0%   { transform: translateY(0); }
-      30%  { transform: translateY(-60px); }
-      60%  { transform: translateY(-30px); }
-      100% { transform: translateY(0); }
+      width: 100px;
+      height: auto;
     }
   </style>
 </head>
 <body>
-  <h1>IS IT 10:55</h1>
-  <div id="time">Loading...</div>
-  <div id="answer">Checking...</div>
+  <div id="answer">Loading...</div>
+  <div id="time">--:--</div>
   <img id="can" src="no.PNG" alt="Trash Can" />
 
   <script>
-    const timeEl = document.getElementById('time');
     const answerEl = document.getElementById('answer');
-    const can = document.getElementById('can');
+    const timeEl = document.getElementById('time');
+    const canEl = document.getElementById('can');
 
-    function updateTime() {
+    function updateDisplay() {
       const now = new Date();
       const hours = now.getHours();
       const minutes = now.getMinutes();
-      const is1055 = (hours === 10 && minutes === 55);
+      const is1055 = hours === 10 && minutes === 55;
 
-      const timeStr = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-      timeEl.textContent = timeStr;
       answerEl.textContent = is1055 ? 'YES' : 'NO';
-
-      // Update image with capitalized PNG extension
-      can.src = is1055 ? 'yes.PNG' : 'no.PNG';
+      timeEl.textContent = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+      canEl.src = is1055 ? 'yes.PNG' : 'no.PNG';
     }
 
-    function animateTrash() {
-      can.classList.remove('shake-fast-2', 'shake-fast', 'jump-small', 'jump-large');
-
-      setTimeout(() => {
-        can.classList.add('shake-fast-2');
-      }, 3000);
-
-      setTimeout(() => {
-        can.classList.remove('shake-fast-2');
-        can.classList.add('jump-small');
-      }, 5000);
-
-      setTimeout(() => {
-        can.classList.remove('jump-small');
-        can.classList.add('shake-fast');
-      }, 6000);
-
-      setTimeout(() => {
-        can.classList.remove('shake-fast');
-        can.classList.add('jump-large');
-      }, 8100);
-    }
-
-    document.addEventListener('click', () => {
-      if (answerEl.textContent === 'NO') {
-        animateTrash();
-      }
-    });
-
-    updateTime();
-    setInterval(updateTime, 1000);
+    updateDisplay();
+    setInterval(updateDisplay, 1000);
   </script>
 </body>
 </html>
