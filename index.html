@@ -81,7 +81,7 @@
   <h1>IS IT 10:55</h1>
   <div id="time">Loading...</div>
   <div id="answer">Checking...</div>
-  <img id="can" src="no.png" alt="Trash Can" />
+  <img id="can" src="no.PNG" alt="Trash Can" />
 
   <script>
     const timeEl = document.getElementById('time');
@@ -98,8 +98,8 @@
       timeEl.textContent = timeStr;
       answerEl.textContent = is1055 ? 'YES' : 'NO';
 
-      // Update image
-      can.src = is1055 ? 'yes.png' : 'no.png';
+      // Update image with capitalized PNG extension
+      can.src = is1055 ? 'yes.PNG' : 'no.PNG';
     }
 
     function animateTrash() {
@@ -107,22 +107,22 @@
 
       setTimeout(() => {
         can.classList.add('shake-fast-2');
-      }, 3000); // 3s
+      }, 3000);
 
       setTimeout(() => {
         can.classList.remove('shake-fast-2');
         can.classList.add('jump-small');
-      }, 5000); // 5s
+      }, 5000);
 
       setTimeout(() => {
         can.classList.remove('jump-small');
         can.classList.add('shake-fast');
-      }, 6000); // 6s
+      }, 6000);
 
       setTimeout(() => {
         can.classList.remove('shake-fast');
         can.classList.add('jump-large');
-      }, 8100); // 8.1s
+      }, 8100);
     }
 
     document.addEventListener('click', () => {
