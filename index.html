@@ -2,61 +2,196 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>IS IT 10:55</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Is it 10:55?</title>
+
+  <link rel="icon" type="image/png" href="icon.png" />
+  <link rel="apple-touch-icon" href="icon.png" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-title" content="Is It 1055?" />
+  <meta name="theme-color" content="#000000" />
+
   <style>
     body {
-      background-color: black;
+      font-family: Arial, sans-serif;
+      background: black;
       color: white;
-      font-family: monospace;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: start;
-      height: 100vh;
-      margin: 0;
-      padding-top: 5vh;
+      text-align: center;
+      padding-top: 50px;
     }
 
-    #answer {
-      font-size: 6rem;
-      margin: 0;
+    #status {
+      font-size: 80px;
+      margin: 20px;
     }
 
-    #time {
-      font-size: 2rem;
-      margin: 1rem 0;
+    #clock {
+      font-size: 40px;
+      margin: 20px;
     }
 
-    #can {
-      width: 100px;
+    #statusImage {
+      width: 300px;
       height: auto;
+      margin-top: 30px;
+      cursor: pointer;
+    }
+
+    .smash { animation: smash 0.2s ease; }
+    .shake-slow { animation: shake 1s infinite; }
+    .shake-fast { animation: shake 0.2s infinite; }
+    .shake-soft { animation: shakeSoft 1s infinite; }
+    .shake-small { animation: shakeSmall 0.4s infinite; }
+    .jump-small { animation: jumpSmall 0.6s ease; }
+    .jump-big { animation: jumpBig 0.8s ease; }
+    .bounce { animation: bounce 1s ease; }
+
+    @keyframes smash {
+      0% { transform: scale(1); }
+      100% { transform: scale(0.8); }
+    }
+
+    @keyframes shake {
+      0%, 100% { transform: translateX(0); }
+      25% { transform: translateX(-2px); }
+      50% { transform: translateX(2px); }
+      75% { transform: translateX(-2px); }
+    }
+
+    @keyframes shakeSoft {
+      0%, 100% { transform: translateX(0); }
+      25% { transform: translateX(-1px); }
+      50% { transform: translateX(1px); }
+      75% { transform: translateX(-1px); }
+    }
+
+    @keyframes shakeSmall {
+      0%, 100% { transform: translateX(0); }
+      25% { transform: translateX(-0.5px); }
+      50% { transform: translateX(0.5px); }
+      75% { transform: translateX(-0.5px); }
+    }
+
+    @keyframes jumpSmall {
+      0% { transform: translateY(0); }
+      50% { transform: translateY(-20px); }
+      100% { transform: translateY(0); }
+    }
+
+    @keyframes jumpBig {
+      0% { transform: translateY(0); }
+      50% { transform: translateY(-80px); }
+      100% { transform: translateY(0); }
+    }
+
+    @keyframes bounce {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-50px); }
     }
   </style>
 </head>
 <body>
-  <div id="answer">Loading...</div>
-  <div id="time">--:--</div>
-  <img id="can" src="no.PNG" alt="Trash Can" />
+  <div id="status">Loading...</div>
+  <div id="clock">--:--:--</div>
+  <img id="statusImage" src="" alt="Status Image" />
+
+  <!-- Preloaded Audio -->
+  <audio id="yesSound" src="yes.mp3" preload="auto"></audio>
+  <audio id="noSound" src="no.mp3" preload="auto"></audio>
 
   <script>
-    const answerEl = document.getElementById('answer');
-    const timeEl = document.getElementById('time');
-    const canEl = document.getElementById('can');
+    let lastStatus = "";
+    let timers = [];
 
-    function updateDisplay() {
+    function clearAnimations() {
+      timers.forEach(timer => clearTimeout(timer));
+      timers = [];
+    }
+
+    function setAnimation(className) {
+      const img = document.getElementById("statusImage");
+      img.className = "";
+      void img.offsetWidth;
+      img.className = className;
+    }
+
+    function clearClassAfter(className, delay) {
+      const img = document.getElementById("statusImage");
+      timers.push(setTimeout(() => {
+        if (img.className === className) {
+          img.className = "";
+        }
+      }, delay));
+    }
+
+    function updateStatusDisplay() {
       const now = new Date();
       const hours = now.getHours();
       const minutes = now.getMinutes();
-      const is1055 = hours === 10 && minutes === 55;
 
-      answerEl.textContent = is1055 ? 'YES' : 'NO';
-      timeEl.textContent = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-      canEl.src = is1055 ? 'yes.PNG' : 'no.PNG';
+      const is1055 = (hours === 10 || hours === 22) && minutes === 55;
+
+      const clock = document.getElementById("clock");
+      const status = document.getElementById("status");
+      const img = document.getElementById("statusImage");
+
+      clock.textContent = now.toLocaleTimeString();
+
+      if (is1055) {
+        status.textContent = "Yes";
+        img.src = "yes.PNG";
+        lastStatus = "yes";
+      } else {
+        status.textContent = "No";
+        img.src = "no.PNG";
+        lastStatus = "no";
+      }
     }
 
-    updateDisplay();
-    setInterval(updateDisplay, 1000);
+    function handleClick() {
+      const yesSound = document.getElementById("yesSound");
+      const noSound = document.getElementById("noSound");
+      clearAnimations();
+
+      if (lastStatus === "yes") {
+        setAnimation("bounce");
+        yesSound.currentTime = 0;
+        yesSound.play().catch(e => console.warn("Yes sound failed:", e));
+      } else {
+        noSound.currentTime = 0;
+        noSound.play().catch(e => console.warn("No sound failed:", e));
+
+        setAnimation("smash");
+
+        timers.push(setTimeout(() => setAnimation("shake-slow"), 200));
+
+        // shake-fast #1: 3.2s → 5.2s
+        timers.push(setTimeout(() => {
+          setAnimation("shake-fast");
+          clearClassAfter("shake-fast", 2000);
+        }, 3200));
+
+        timers.push(setTimeout(() => setAnimation("jump-small"), 3000));
+        timers.push(setTimeout(() => setAnimation("jump-small"), 4000));
+        timers.push(setTimeout(() => setAnimation("shake-soft"), 4300));
+
+        // shake-fast #2: 6.0s → 8.0s
+        timers.push(setTimeout(() => {
+          setAnimation("shake-fast");
+          clearClassAfter("shake-fast", 2000);
+        }, 6000));
+
+        timers.push(setTimeout(() => setAnimation("jump-small"), 6000));
+        timers.push(setTimeout(() => setAnimation("shake-small"), 6100));
+        timers.push(setTimeout(() => setAnimation("shake-soft"), 7000));
+        timers.push(setTimeout(() => setAnimation("jump-big"), 8000));
+      }
+    }
+
+    updateStatusDisplay();
+    setInterval(updateStatusDisplay, 1000);
+    document.getElementById("statusImage").addEventListener("click", handleClick);
   </script>
 </body>
 </html>
+
