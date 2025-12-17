@@ -20,19 +20,25 @@ body {
 #status { font-size: 80px; margin: 20px; }
 #clock { font-size: 40px; margin: 20px; }
 
+/* ===== TRASH + HAT ===== */
+
 #trashWrapper {
+  display: inline-block;
+  position: relative;
+}
+
+#trashAnim {
   position: relative;
   display: inline-block;
 }
 
 #statusImage {
   width: 300px;
-  margin-top: 30px;
+  display: block;
   cursor: pointer;
 }
 
 /* ===== ORIGINAL ANIMATIONS (UNCHANGED) ===== */
-
 .smash { animation: smash 0.2s ease; }
 .shake-slow { animation: shake 1s infinite; }
 .shake-fast { animation: shake 0.2s infinite; }
@@ -78,8 +84,7 @@ body {
   50% { transform: translateY(-50px); }
 }
 
-/* ===== SANTA HAT ===== */
-
+/* 🎅 SANTA HAT */
 .santa-hat {
   position: absolute;
   width: 140px;
@@ -96,12 +101,12 @@ body {
 }
 
 @keyframes hatFly {
-  0% {
-    transform: rotate(28deg) translate(0, 0);
+  from {
+    transform: rotate(28deg) translate(0,0);
     opacity: 1;
   }
-  100% {
-    transform: rotate(720deg) translate(200px, -300px);
+  to {
+    transform: rotate(720deg) translate(220px,-320px);
     opacity: 0;
   }
 }
@@ -116,7 +121,6 @@ body {
 .snowflake {
   position: absolute;
   top: -10px;
-  color: white;
   opacity: 0.8;
   animation: fall linear infinite;
 }
@@ -135,27 +139,25 @@ body {
 <div id="clock">--:--:--</div>
 
 <div id="trashWrapper">
-  <img id="statusImage" src="" alt="Trash Can" />
+  <div id="trashAnim">
+    <img id="statusImage" src="" alt="Trash Can" />
+    <img id="hat" class="santa-hat" src="santa-hat.png" />
+  </div>
 </div>
 
 <audio id="yesSound" src="yes.mp3"></audio>
 <audio id="noSound" src="no.mp3"></audio>
-<audio id="xmasMusic" src="christmas.mp3" loop></audio>
+<audio id="xmasMusic" src="christmas.mp3"></audio>
 
 <script>
 let lastStatus = "";
 let timers = [];
-let musicStarted = false;
 
-function clearAnimations() {
-  timers.forEach(t => clearTimeout(t));
-  timers = [];
-  document.getElementById("statusImage").className = "";
-}
+const trashAnim = document.getElementById("trashAnim");
+const hat = document.getElementById("hat");
 
-/* ❄️ December-only snow */
+/* ❄️ Snow (December) */
 if (new Date().getMonth() === 11) {
-  const snow = document.getElementById("snow");
   setInterval(() => {
     const f = document.createElement("div");
     f.className = "snowflake";
@@ -168,8 +170,25 @@ if (new Date().getMonth() === 11) {
   }, 350);
 }
 
-function clearHat() {
-  document.querySelectorAll(".santa-hat").forEach(h => h.remove());
+function clearAnimations() {
+  timers.forEach(t => clearTimeout(t));
+  timers = [];
+  trashAnim.className = "";
+  hat.className = "santa-hat";
+}
+
+function playClickSound(sound) {
+  const music = xmasMusic;
+  music.volume = 0.35;
+  music.play().catch(()=>{});
+
+  sound.currentTime = 0;
+  sound.play();
+
+  sound.onended = () => {
+    music.pause();
+    music.currentTime = 0;
+  };
 }
 
 function updateStatusDisplay() {
@@ -178,73 +197,52 @@ function updateStatusDisplay() {
     (now.getHours() === 10 || now.getHours() === 22) &&
     now.getMinutes() === 55;
 
-  document.getElementById("clock").textContent = now.toLocaleTimeString();
-  const status = document.getElementById("status");
-  const img = document.getElementById("statusImage");
-  const wrapper = document.getElementById("trashWrapper");
-
-  clearHat();
-
-  const hat = document.createElement("img");
-  hat.src = "santa-hat.png";
-  hat.className = "santa-hat";
-  wrapper.appendChild(hat);
+  clock.textContent = now.toLocaleTimeString();
 
   if (is1055) {
     status.textContent = "Yes";
-    img.src = "yes.PNG";
+    statusImage.src = "yes.PNG";
     lastStatus = "yes";
   } else {
     status.textContent = "No";
-    img.src = "no.PNG";
+    statusImage.src = "no.PNG";
     lastStatus = "no";
   }
 }
 
 function handleClick() {
-  const img = document.getElementById("statusImage");
-  const hat = document.querySelector(".santa-hat");
-
   clearAnimations();
 
-  if (!musicStarted) {
-    const music = document.getElementById("xmasMusic");
-    music.volume = 0.35;
-    music.play().catch(()=>{});
-    musicStarted = true;
-  }
-
   if (lastStatus === "yes") {
-    img.className = "bounce";
-    document.getElementById("yesSound").play();
+    trashAnim.className = "bounce";
+    playClickSound(yesSound);
   } else {
-    document.getElementById("noSound").play();
+    playClickSound(noSound);
 
-    img.className = "smash";
+    trashAnim.className = "smash";
+    timers.push(setTimeout(() => trashAnim.className = "shake-slow", 200));
+    timers.push(setTimeout(() => trashAnim.className = "jump-small", 3000));
+    timers.push(setTimeout(() => trashAnim.className = "shake-fast", 3200));
+    timers.push(setTimeout(() => trashAnim.className = "jump-small", 4000));
+    timers.push(setTimeout(() => trashAnim.className = "shake-soft", 4300));
+    timers.push(setTimeout(() => trashAnim.className = "shake-fast", 5750));
+    timers.push(setTimeout(() => trashAnim.className = "jump-small", 6000));
+    timers.push(setTimeout(() => trashAnim.className = "shake-small", 6100));
+    timers.push(setTimeout(() => trashAnim.className = "shake-soft", 7000));
 
-    timers.push(setTimeout(() => img.className = "shake-slow", 200));
-    timers.push(setTimeout(() => img.className = "jump-small", 3000));
-    timers.push(setTimeout(() => img.className = "shake-fast", 3200));
-    timers.push(setTimeout(() => img.className = "jump-small", 4000));
-    timers.push(setTimeout(() => img.className = "shake-soft", 4300));
-    timers.push(setTimeout(() => img.className = "shake-fast", 5750));
-    timers.push(setTimeout(() => img.className = "jump-small", 6000));
-    timers.push(setTimeout(() => img.className = "shake-small", 6100));
-    timers.push(setTimeout(() => img.className = "shake-soft", 7000));
+    // BIG JUMP
+    timers.push(setTimeout(() => trashAnim.className = "jump-big", 8000));
 
-    // 🟢 BIG JUMP
-    timers.push(setTimeout(() => img.className = "jump-big", 8000));
-
-    // 🚀 HAT FLIES OFF AT PEAK (8.4s)
+    // 🚀 Hat flies at exact apex (8.4s)
     timers.push(setTimeout(() => {
-      if (hat) hat.classList.add("hat-fly");
+      hat.classList.add("hat-fly");
     }, 8400));
   }
 }
 
 updateStatusDisplay();
 setInterval(updateStatusDisplay, 1000);
-document.getElementById("statusImage").addEventListener("click", handleClick);
+statusImage.addEventListener("click", handleClick);
 </script>
 
 </body>
