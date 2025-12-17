@@ -39,20 +39,20 @@ body {
   display: block;
 }
 
-/* 🎅 SANTA HAT — WORN */
+/* 🎅 SANTA HAT — WORN ON SIDE */
 .santa-hat {
   position: absolute;
-  width: 120px;              /* BIGGER */
-  left: 50%;
-  top: 18px;                 /* sits ON lid */
-  transform: translateX(-50%) rotate(-10deg);
+  width: 140px;                 /* BIGGER */
+  top: 40px;                    /* down from lid */
+  left: 65%;                    /* shifted to SIDE */
+  transform: rotate(-35deg);    /* worn angle */
   z-index: 5;
-  transition: transform 0.6s ease, top 0.6s ease;
 }
 
 /* 🎅 HAT ON GROUND (YES) */
 .santa-hat.ground {
-  top: 260px;                /* ground below can */
+  top: 270px;                   /* ground below can */
+  left: 50%;
   transform: translateX(-50%) rotate(180deg);
 }
 
@@ -61,7 +61,6 @@ body {
   position: fixed;
   inset: 0;
   pointer-events: none;
-  z-index: 0;
 }
 
 .snowflake {
@@ -145,7 +144,7 @@ function updateStatusDisplay() {
     status.textContent = "No";
     img.src = "no.PNG";
 
-    wrapper.appendChild(hat);      // worn normally
+    wrapper.appendChild(hat);      // worn on side
     lastStatus = "no";
   }
 }
@@ -167,5 +166,3 @@ document
 
 </body>
 </html>
-
-
