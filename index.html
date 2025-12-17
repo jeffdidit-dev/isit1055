@@ -32,16 +32,17 @@ body {
   display: block;
 }
 
-/* 🎅 SANTA HAT — CORRECTLY WORN */
+/* 🎅 SANTA HAT — SAME ANGLE, HIGHER */
 .santa-hat {
   position: absolute;
   width: 140px;
 
-  /* FINAL, CORRECT GEOMETRY */
-  top: 22px;                  /* rim height */
-  left: 56%;                  /* top-right */
-  transform-origin: 20% 80%;  /* pivot near band */
-  transform: rotate(38deg);   /* CLOCKWISE → pom-pom DOWN */
+  /* ONLY CHANGE IS THIS LINE */
+  top: 6px;                   /* lifted higher on rim */
+
+  left: 56%;
+  transform-origin: 20% 80%;
+  transform: rotate(38deg);
 
   z-index: 5;
 }
