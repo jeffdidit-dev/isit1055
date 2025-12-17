@@ -17,10 +17,17 @@ body {
   overflow-x: hidden;
 }
 
-#status { font-size: 80px; margin: 20px; }
-#clock { font-size: 40px; margin: 20px; }
+#status {
+  font-size: 80px;
+  margin: 20px;
+}
 
-/* ===== TRASH + OVERLAYS ===== */
+#clock {
+  font-size: 40px;
+  margin: 20px;
+}
+
+/* ===== TRASH + HAT ===== */
 
 #trashWrapper {
   position: relative;
@@ -32,24 +39,21 @@ body {
   display: block;
 }
 
-/* 🎅 SANTA HAT — VISUALLY PINNED TO LID */
+/* 🎅 SANTA HAT — WORN */
 .santa-hat {
   position: absolute;
-
-  /* THESE VALUES ARE THE FIX */
-  top: 22px;               /* ⬅️ pushes it DOWN onto the lid */
+  width: 120px;              /* BIGGER */
   left: 50%;
-  transform: translateX(-50%) rotate(-12deg);
-
-  width: 70px;
-  pointer-events: auto;
-  transition: transform 0.6s ease, opacity 0.6s ease;
+  top: 18px;                 /* sits ON lid */
+  transform: translateX(-50%) rotate(-10deg);
   z-index: 5;
+  transition: transform 0.6s ease, top 0.6s ease;
 }
 
-.santa-hat.fall {
-  transform: translateX(-50%) translateY(160px) rotate(140deg);
-  opacity: 0;
+/* 🎅 HAT ON GROUND (YES) */
+.santa-hat.ground {
+  top: 260px;                /* ground below can */
+  transform: translateX(-50%) rotate(180deg);
 }
 
 /* ❄️ SNOW */
@@ -57,6 +61,7 @@ body {
   position: fixed;
   inset: 0;
   pointer-events: none;
+  z-index: 0;
 }
 
 .snowflake {
@@ -81,7 +86,7 @@ body {
 <div id="clock">--:--:--</div>
 
 <div id="trashWrapper">
-  <img id="statusImage" src="" alt="Trash" />
+  <img id="statusImage" src="" alt="Trash Can" />
 </div>
 
 <audio id="yesSound" src="yes.mp3"></audio>
@@ -94,14 +99,14 @@ let lastStatus = "";
 if (new Date().getMonth() === 11) {
   const snow = document.getElementById("snow");
   setInterval(() => {
-    const f = document.createElement("div");
-    f.className = "snowflake";
-    f.textContent = "❄";
-    f.style.left = Math.random() * 100 + "vw";
-    f.style.fontSize = 10 + Math.random() * 14 + "px";
-    f.style.animationDuration = 6 + Math.random() * 6 + "s";
-    snow.appendChild(f);
-    setTimeout(() => f.remove(), 12000);
+    const flake = document.createElement("div");
+    flake.className = "snowflake";
+    flake.textContent = "❄";
+    flake.style.left = Math.random() * 100 + "vw";
+    flake.style.fontSize = 10 + Math.random() * 14 + "px";
+    flake.style.animationDuration = 6 + Math.random() * 6 + "s";
+    snow.appendChild(flake);
+    setTimeout(() => flake.remove(), 12000);
   }, 350);
 }
 
@@ -124,21 +129,23 @@ function updateStatusDisplay() {
 
   clearHat();
 
+  const hat = document.createElement("img");
+  hat.src = "santa-hat.png";
+  hat.className = "santa-hat";
+
   if (is1055) {
     status.textContent = "Yes";
     img.src = "yes.PNG";
+
+    hat.classList.add("ground");   // upside-down on ground
+    wrapper.appendChild(hat);
+
     lastStatus = "yes";
   } else {
     status.textContent = "No";
     img.src = "no.PNG";
 
-    /* 🎅 CREATE HAT */
-    const hat = document.createElement("img");
-    hat.src = "santa-hat.png";
-    hat.className = "santa-hat";
-    hat.onclick = () => hat.classList.add("fall");
-
-    wrapper.appendChild(hat);
+    wrapper.appendChild(hat);      // worn normally
     lastStatus = "no";
   }
 }
@@ -160,4 +167,5 @@ document
 
 </body>
 </html>
+
 
