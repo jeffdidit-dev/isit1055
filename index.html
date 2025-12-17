@@ -21,13 +21,18 @@ body {
   overflow-x: hidden;
 }
 
-#status { font-size: 80px; margin: 20px; z-index:2; position:relative; }
-#clock { font-size: 40px; margin: 20px; z-index:2; position:relative; }
+#status { font-size: 80px; margin: 20px; position: relative; z-index: 2; }
+#clock { font-size: 40px; margin: 20px; position: relative; z-index: 2; }
 
 #trashWrapper {
   display: inline-block;
   position: relative;
   z-index: 2;
+}
+
+#trashInner {
+  position: relative;
+  display: inline-block;
 }
 
 #statusImage {
@@ -55,14 +60,16 @@ body {
 /* 🎅 Santa Hat */
 .santa-hat {
   position: absolute;
-  top: -35px;
-  right: -20px;
-  width: 80px;
-  transform: rotate(10deg);
+  top: -30px;
+  left: 50%;
+  width: 70px;
+  transform: translateX(-50%) rotate(-10deg);
   transition: transform 0.6s ease, opacity 0.6s ease;
+  cursor: pointer;
 }
+
 .santa-hat.fall {
-  transform: translateY(120px) rotate(120deg);
+  transform: translateX(-50%) translateY(140px) rotate(120deg);
   opacity: 0;
 }
 
@@ -73,6 +80,7 @@ body {
   width: 30px;
   animation: wiggle 1.5s ease-in-out infinite;
 }
+
 @keyframes wiggle {
   0%,100% { transform: rotate(0deg); }
   50% { transform: rotate(10deg); }
@@ -124,10 +132,11 @@ body {
 <div id="clock">--:--:--</div>
 
 <div id="trashWrapper">
-  <img id="statusImage" src="" alt="Status Image" />
+  <div id="trashInner">
+    <img id="statusImage" src="" alt="Status Image" />
+  </div>
 </div>
 
-<!-- Sounds -->
 <audio id="yesSound" src="yes.mp3" preload="auto"></audio>
 <audio id="noSound" src="no.mp3" preload="auto"></audio>
 <audio id="xmasMusic" src="christmas.mp3" loop preload="auto"></audio>
@@ -162,7 +171,7 @@ function updateStatusDisplay() {
   document.getElementById("clock").textContent = now.toLocaleTimeString();
   const img = document.getElementById("statusImage");
   const status = document.getElementById("status");
-  const wrapper = document.getElementById("trashWrapper");
+  const inner = document.getElementById("trashInner");
 
   clearDecor();
 
@@ -174,8 +183,8 @@ function updateStatusDisplay() {
       const cane = document.createElement("img");
       cane.src = "candy-cane.png";
       cane.className = "candy-cane";
-      cane.style.left = 30 + i * 40 + "px";
-      wrapper.appendChild(cane);
+      cane.style.left = 20 + i * 40 + "px";
+      inner.appendChild(cane);
     }
 
     lastStatus = "yes";
@@ -187,7 +196,7 @@ function updateStatusDisplay() {
     hat.src = "santa-hat.png";
     hat.className = "santa-hat";
     hat.onclick = () => hat.classList.add("fall");
-    wrapper.appendChild(hat);
+    inner.appendChild(hat);
 
     lastStatus = "no";
   }
@@ -204,12 +213,15 @@ function handleClick() {
     musicStarted = true;
   }
 
+  const img = document.getElementById("statusImage");
+  img.className = "";
+
   if (lastStatus === "yes") {
-    document.getElementById("statusImage").className = "bounce";
+    img.className = "bounce";
     yesSound.currentTime = 0;
     yesSound.play();
   } else {
-    document.getElementById("statusImage").className = "smash";
+    img.className = "smash";
     noSound.currentTime = 0;
     noSound.play();
   }
