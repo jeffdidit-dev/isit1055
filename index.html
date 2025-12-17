@@ -17,15 +17,8 @@ body {
   overflow-x: hidden;
 }
 
-#status {
-  font-size: 80px;
-  margin: 20px;
-}
-
-#clock {
-  font-size: 40px;
-  margin: 20px;
-}
+#status { font-size: 80px; margin: 20px; }
+#clock { font-size: 40px; margin: 20px; }
 
 /* ===== TRASH + HAT ===== */
 
@@ -39,21 +32,21 @@ body {
   display: block;
 }
 
-/* 🎅 SANTA HAT — WORN PROPERLY */
+/* 🎅 SANTA HAT — WORN, TILTED DOWN */
 .santa-hat {
   position: absolute;
   width: 140px;
 
-  /* 👇 KEY FIXES */
-  top: 22px;                 /* aligns with lid rim */
-  left: 56%;                 /* slightly right, NOT floating */
-  transform-origin: 20% 80%; /* pivot from bottom-left */
-  transform: rotate(-32deg);
+  /* FINAL GEOMETRY */
+  top: 20px;                  /* rim height */
+  left: 55%;                  /* top-right side */
+  transform-origin: 25% 75%;  /* pivot near band */
+  transform: rotate(-50deg);  /* STRONGER tilt */
 
   z-index: 5;
 }
 
-/* 🎅 HAT ON GROUND WHEN YES */
+/* 🎅 HAT ON GROUND (YES) */
 .santa-hat.ground {
   top: 270px;
   left: 50%;
