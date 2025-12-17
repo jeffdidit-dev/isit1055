@@ -36,13 +36,10 @@ body {
 .santa-hat {
   position: absolute;
   width: 140px;
-
-  /* MICRO ADJUSTMENTS */
-  top: -18px;                 /* slightly higher */
+  top: -18px;
   left: 56%;
   transform-origin: 20% 80%;
-  transform: rotate(28deg);   /* counter-clockwise a bit */
-
+  transform: rotate(28deg);
   z-index: 5;
 }
 
@@ -86,11 +83,16 @@ body {
   <img id="statusImage" src="" alt="Trash Can" />
 </div>
 
+<!-- EXISTING SOUNDS -->
 <audio id="yesSound" src="yes.mp3"></audio>
 <audio id="noSound" src="no.mp3"></audio>
 
+<!-- 🎄 CHRISTMAS BACKGROUND MUSIC -->
+<audio id="xmasMusic" src="christmas.mp3" loop></audio>
+
 <script>
 let lastStatus = "";
+let musicStarted = false;
 
 /* ❄️ December-only snow */
 if (new Date().getMonth() === 11) {
@@ -133,20 +135,26 @@ function updateStatusDisplay() {
   if (is1055) {
     status.textContent = "Yes";
     img.src = "yes.PNG";
-
     hat.classList.add("ground");
     wrapper.appendChild(hat);
     lastStatus = "yes";
   } else {
     status.textContent = "No";
     img.src = "no.PNG";
-
     wrapper.appendChild(hat);
     lastStatus = "no";
   }
 }
 
 function handleClick() {
+  // 🔊 start Christmas music on first interaction
+  if (!musicStarted) {
+    const music = document.getElementById("xmasMusic");
+    music.volume = 0.35;
+    music.play().catch(() => {});
+    musicStarted = true;
+  }
+
   if (lastStatus === "yes") {
     document.getElementById("yesSound").play();
   } else {
