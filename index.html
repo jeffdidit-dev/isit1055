@@ -20,8 +20,6 @@ body {
 #status { font-size: 80px; margin: 20px; }
 #clock { font-size: 40px; margin: 20px; }
 
-/* ===== TRASH + HAT ===== */
-
 #trashWrapper {
   position: relative;
   display: inline-block;
@@ -29,10 +27,59 @@ body {
 
 #statusImage {
   width: 300px;
-  display: block;
+  margin-top: 30px;
+  cursor: pointer;
 }
 
-/* 🎅 SANTA HAT — FINAL TUNING */
+/* ===== ORIGINAL ANIMATIONS (UNCHANGED) ===== */
+
+.smash { animation: smash 0.2s ease; }
+.shake-slow { animation: shake 1s infinite; }
+.shake-fast { animation: shake 0.2s infinite; }
+.shake-soft { animation: shakeSoft 1s infinite; }
+.shake-small { animation: shakeSmall 0.4s infinite; }
+.jump-small { animation: jumpSmall 0.6s ease; }
+.jump-big { animation: jumpBig 0.8s ease; }
+.bounce { animation: bounce 1s ease; }
+
+@keyframes smash {
+  0% { transform: scale(1); }
+  100% { transform: scale(0.8); }
+}
+
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(-2px); }
+  50% { transform: translateX(2px); }
+  75% { transform: translateX(-2px); }
+}
+
+@keyframes shakeSoft {
+  25% { transform: translateX(-1px); }
+  50% { transform: translateX(1px); }
+  75% { transform: translateX(-1px); }
+}
+
+@keyframes shakeSmall {
+  25% { transform: translateX(-0.5px); }
+  50% { transform: translateX(0.5px); }
+  75% { transform: translateX(-0.5px); }
+}
+
+@keyframes jumpSmall {
+  50% { transform: translateY(-20px); }
+}
+
+@keyframes jumpBig {
+  50% { transform: translateY(-80px); }
+}
+
+@keyframes bounce {
+  50% { transform: translateY(-50px); }
+}
+
+/* ===== SANTA HAT ===== */
+
 .santa-hat {
   position: absolute;
   width: 140px;
@@ -43,12 +90,20 @@ body {
   z-index: 5;
 }
 
-/* 🎅 HAT ON GROUND (YES) */
-.santa-hat.ground {
-  top: 270px;
-  left: 50%;
-  transform-origin: center;
-  transform: translateX(-50%) rotate(180deg);
+/* 🚀 HAT FLY-OFF */
+.hat-fly {
+  animation: hatFly 1s ease-out forwards;
+}
+
+@keyframes hatFly {
+  0% {
+    transform: rotate(28deg) translate(0, 0);
+    opacity: 1;
+  }
+  100% {
+    transform: rotate(720deg) translate(200px, -300px);
+    opacity: 0;
+  }
 }
 
 /* ❄️ SNOW */
@@ -83,29 +138,33 @@ body {
   <img id="statusImage" src="" alt="Trash Can" />
 </div>
 
-<!-- EXISTING SOUNDS -->
 <audio id="yesSound" src="yes.mp3"></audio>
 <audio id="noSound" src="no.mp3"></audio>
-
-<!-- 🎄 CHRISTMAS BACKGROUND MUSIC -->
 <audio id="xmasMusic" src="christmas.mp3" loop></audio>
 
 <script>
 let lastStatus = "";
+let timers = [];
 let musicStarted = false;
+
+function clearAnimations() {
+  timers.forEach(t => clearTimeout(t));
+  timers = [];
+  document.getElementById("statusImage").className = "";
+}
 
 /* ❄️ December-only snow */
 if (new Date().getMonth() === 11) {
   const snow = document.getElementById("snow");
   setInterval(() => {
-    const flake = document.createElement("div");
-    flake.className = "snowflake";
-    flake.textContent = "❄";
-    flake.style.left = Math.random() * 100 + "vw";
-    flake.style.fontSize = 10 + Math.random() * 14 + "px";
-    flake.style.animationDuration = 6 + Math.random() * 6 + "s";
-    snow.appendChild(flake);
-    setTimeout(() => flake.remove(), 12000);
+    const f = document.createElement("div");
+    f.className = "snowflake";
+    f.textContent = "❄";
+    f.style.left = Math.random() * 100 + "vw";
+    f.style.fontSize = 10 + Math.random() * 14 + "px";
+    f.style.animationDuration = 6 + Math.random() * 6 + "s";
+    snow.appendChild(f);
+    setTimeout(() => f.remove(), 12000);
   }, 350);
 }
 
@@ -119,9 +178,7 @@ function updateStatusDisplay() {
     (now.getHours() === 10 || now.getHours() === 22) &&
     now.getMinutes() === 55;
 
-  document.getElementById("clock").textContent =
-    now.toLocaleTimeString();
-
+  document.getElementById("clock").textContent = now.toLocaleTimeString();
   const status = document.getElementById("status");
   const img = document.getElementById("statusImage");
   const wrapper = document.getElementById("trashWrapper");
@@ -131,42 +188,63 @@ function updateStatusDisplay() {
   const hat = document.createElement("img");
   hat.src = "santa-hat.png";
   hat.className = "santa-hat";
+  wrapper.appendChild(hat);
 
   if (is1055) {
     status.textContent = "Yes";
     img.src = "yes.PNG";
-    hat.classList.add("ground");
-    wrapper.appendChild(hat);
     lastStatus = "yes";
   } else {
     status.textContent = "No";
     img.src = "no.PNG";
-    wrapper.appendChild(hat);
     lastStatus = "no";
   }
 }
 
 function handleClick() {
-  // 🔊 start Christmas music on first interaction
+  const img = document.getElementById("statusImage");
+  const hat = document.querySelector(".santa-hat");
+
+  clearAnimations();
+
   if (!musicStarted) {
     const music = document.getElementById("xmasMusic");
     music.volume = 0.35;
-    music.play().catch(() => {});
+    music.play().catch(()=>{});
     musicStarted = true;
   }
 
   if (lastStatus === "yes") {
+    img.className = "bounce";
     document.getElementById("yesSound").play();
   } else {
     document.getElementById("noSound").play();
+
+    img.className = "smash";
+
+    timers.push(setTimeout(() => img.className = "shake-slow", 200));
+    timers.push(setTimeout(() => img.className = "jump-small", 3000));
+    timers.push(setTimeout(() => img.className = "shake-fast", 3200));
+    timers.push(setTimeout(() => img.className = "jump-small", 4000));
+    timers.push(setTimeout(() => img.className = "shake-soft", 4300));
+    timers.push(setTimeout(() => img.className = "shake-fast", 5750));
+    timers.push(setTimeout(() => img.className = "jump-small", 6000));
+    timers.push(setTimeout(() => img.className = "shake-small", 6100));
+    timers.push(setTimeout(() => img.className = "shake-soft", 7000));
+
+    // 🟢 BIG JUMP
+    timers.push(setTimeout(() => img.className = "jump-big", 8000));
+
+    // 🚀 HAT FLIES OFF AT PEAK (8.4s)
+    timers.push(setTimeout(() => {
+      if (hat) hat.classList.add("hat-fly");
+    }, 8400));
   }
 }
 
 updateStatusDisplay();
 setInterval(updateStatusDisplay, 1000);
-document
-  .getElementById("trashWrapper")
-  .addEventListener("click", handleClick);
+document.getElementById("statusImage").addEventListener("click", handleClick);
 </script>
 
 </body>
