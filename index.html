@@ -27,7 +27,7 @@ body {
   margin: 20px;
 }
 
-/* ===== TRASH / HAT WRAPPER ===== */
+/* ===== TRASH WRAPPER ===== */
 #trashWrapper {
   position: relative;
   display: inline-block;
@@ -44,7 +44,7 @@ body {
   display: block;
 }
 
-/* ===== ORIGINAL ANIMATIONS (UNCHANGED) ===== */
+/* ===== ORIGINAL ANIMATIONS ===== */
 .smash { animation: smash 0.2s ease; }
 .shake-slow { animation: shake 1s infinite; }
 .shake-fast { animation: shake 0.2s infinite; }
@@ -89,57 +89,10 @@ body {
 @keyframes bounce {
   50% { transform: translateY(-50px); }
 }
-
-/* ===== SANTA HAT ===== */
-.santa-hat {
-  position: absolute;
-  width: 140px;
-  top: -18px;
-  left: 56%;
-  transform-origin: 20% 80%;
-  transform: rotate(28deg);
-  z-index: 5;
-}
-
-/* ===== HAT FLY OFF ===== */
-.hat-fly {
-  animation: hatFly 1s ease-out forwards;
-}
-
-@keyframes hatFly {
-  from {
-    transform: rotate(28deg) translate(0,0);
-    opacity: 1;
-  }
-  to {
-    transform: rotate(720deg) translate(220px,-320px);
-    opacity: 0;
-  }
-}
-
-/* ===== SNOW ===== */
-#snow {
-  position: fixed;
-  inset: 0;
-  pointer-events: none;
-}
-
-.snowflake {
-  position: absolute;
-  top: -10px;
-  opacity: 0.8;
-  animation: fall linear infinite;
-}
-
-@keyframes fall {
-  to { transform: translateY(110vh); }
-}
 </style>
 </head>
 
 <body>
-
-<div id="snow"></div>
 
 <div id="status">Loading...</div>
 <div id="clock">--:--:--</div>
@@ -147,59 +100,29 @@ body {
 <div id="trashWrapper">
   <div id="trashAnim">
     <img id="statusImage" src="" alt="Trash Can">
-    <img id="hat" class="santa-hat" src="santa-hat.png">
   </div>
 </div>
 
 <audio id="yesSound" src="yes.mp3" preload="auto"></audio>
 <audio id="noSound" src="no.mp3" preload="auto"></audio>
-<audio id="xmasMusic" src="christmas.mp3" preload="auto"></audio>
 
 <script>
 let lastStatus = "";
 let timers = [];
 
-const snow = document.getElementById("snow");
 const trashAnim = document.getElementById("trashAnim");
-const hat = document.getElementById("hat");
 const statusImage = document.getElementById("statusImage");
-
-/* ===== SNOW (DECEMBER ONLY) ===== */
-if (new Date().getMonth() === 11) {
-  setInterval(() => {
-    const flake = document.createElement("div");
-    flake.className = "snowflake";
-    flake.textContent = "❄";
-    flake.style.left = Math.random() * 100 + "vw";
-    flake.style.fontSize = 10 + Math.random() * 14 + "px";
-    flake.style.animationDuration = 6 + Math.random() * 6 + "s";
-    snow.appendChild(flake);
-    setTimeout(() => flake.remove(), 12000);
-  }, 350);
-}
 
 /* ===== HELPERS ===== */
 function clearAnimations() {
   timers.forEach(t => clearTimeout(t));
   timers = [];
   trashAnim.className = "";
-  hat.className = "santa-hat";
 }
 
 function playClickSound(sound) {
-  const music = document.getElementById("xmasMusic");
-
-  music.volume = 0.35;
-  music.currentTime = 0;
-  music.play().catch(()=>{});
-
   sound.currentTime = 0;
   sound.play();
-
-  sound.onended = () => {
-    music.pause();
-    music.currentTime = 0;
-  };
 }
 
 /* ===== STATUS / CLOCK ===== */
@@ -244,13 +167,7 @@ function handleClick() {
     timers.push(setTimeout(() => trashAnim.className = "jump-small", 6000));
     timers.push(setTimeout(() => trashAnim.className = "shake-small", 6100));
     timers.push(setTimeout(() => trashAnim.className = "shake-soft", 7000));
-
     timers.push(setTimeout(() => trashAnim.className = "jump-big", 8000));
-
-    /* 🚀 Hat flies exactly at jump apex */
-    timers.push(setTimeout(() => {
-      hat.classList.add("hat-fly");
-    }, 8400));
   }
 }
 
@@ -262,3 +179,4 @@ statusImage.addEventListener("click", handleClick);
 
 </body>
 </html>
+
